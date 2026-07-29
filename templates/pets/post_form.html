@@ -1,0 +1,36 @@
+{% extends 'pets/base.html' %}
+{% block title %}发布帖子 - 宠友圈{% endblock %}
+{% block content %}
+<div style="padding:2rem;max-width: 1100px;margin:0 auto;">
+    <div style="background:white;border-radius:24px;padding:2rem;box-shadow:0 4px 25px var(--shadow);">
+        <h2 style="text-align:center;font-size:1.3rem;color:var(--brown);margin-bottom:0.3rem;">✏️ 发布帖子</h2>
+        <p style="text-align:center;color:var(--text-light);font-size:0.85rem;margin-bottom:1.5rem;">分享养宠日常或寻求帮助</p>
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.3rem;">帖子类型</label>
+                <select name="category" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid #eee;border-radius:12px;font-size:0.9rem;outline:none;background:var(--cream);">
+                    <option value="share">🙌 日常分享</option>
+                    <option value="help">🆘 求助</option>
+                </select>
+            </div>
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.3rem;">标题</label>
+                <input type="text" name="title" required style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid #eee;border-radius:12px;font-size:0.9rem;outline:none;background:var(--cream);">
+            </div>
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.3rem;">内容</label>
+                <textarea name="content" rows="6" required style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid #eee;border-radius:12px;font-size:0.9rem;outline:none;background:var(--cream);resize:vertical;box-sizing:border-box;"></textarea>
+            </div>
+            <div style="margin-bottom:1rem;">
+                <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.3rem;">图片链接（选填）</label>
+                <input type="url" name="image_url" placeholder="https://..." style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid #eee;border-radius:12px;font-size:0.9rem;outline:none;background:var(--cream);">
+            </div>
+            <button type="submit" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.5rem 1.2rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.85rem;box-shadow:0 4px 12px var(--shadow);" style="width:100%;padding:0.8rem;font-size:1rem;">📢 发布</button>
+        </form>
+        <div style="text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--text-light);">
+            <a href="{% url 'pets:post_list' %}" style="color:var(--pink);text-decoration:none;font-weight:600;">← 返回列表</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

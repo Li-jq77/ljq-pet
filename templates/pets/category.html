@@ -1,0 +1,59 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}{{ category.icon }} {{ category.name }} - 里脊球的宠物店{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>{{ category.icon }} {{ category.name }}</h1>
+    <p>{{ category.description|default:'来看看这些可爱的毛孩子吧 💕' }}</p>
+</section>
+
+<div class="dog-section">
+    <a href="{% url 'pets:index' %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.5rem 1.2rem;background:white;color:var(--text-light);border-radius:50px;text-decoration:none;box-shadow:0 2px 10px var(--shadow);margin-bottom:1.5rem;font-size:0.85rem;font-weight:500;">← 返回首页</a>
+</div>
+
+<section class="dog-section">
+    {% if dogs %}
+    <div class="dog-grid">
+        {% for dog in dogs %}
+        <a href="{% url 'pets:dog_detail' dog.pk %}" class="dog-card" style="text-decoration:none;color:inherit;">
+            <div class="dog-img-wrapper">
+                {% if dog.is_popular %}<span class="popular-badge">🔥 热门</span>{% endif %}
+                <img class="dog-img" src="{{ dog.image_url|default:'https://placedog.net/400/300' }}" alt="{{ dog.name }}" loading="lazy">
+            </div>
+            <div class="dog-info">
+                <div class="dog-name">{{ dog.name }}</div>
+                <div class="dog-category">{{ dog.category.icon }} {{ dog.category.name }}</div>
+                <div class="dog-tags">
+                    {% if dog.origin %}<span class="tag">🌍 {{ dog.origin }}</span>{% endif %}
+                    {% if dog.weight %}<span class="tag">⚖️ {{ dog.weight }}</span>{% endif %}
+                    {% if dog.lifespan %}<span class="tag">⏳ {{ dog.lifespan }}</span>{% endif %}
+                </div>
+                <div class="dog-price">¥{{ dog.price }} <small>起</small></div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo;</a>
+        <a href="?page={{ page_obj.previous_page_number }}">‹</a>
+        {% endif %}
+        <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">›</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <p style="text-align:center; color:var(--text-light); padding: 3rem 0;">
+        这个分类还没有狗狗哦 🐾
+    </p>
+    {% endif %}
+</section>
+{% endblock %}

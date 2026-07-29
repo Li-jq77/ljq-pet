@@ -1,0 +1,621 @@
+﻿{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}{{ pet.name }}的档案 - 里脊球的宠物店{% endblock %}
+
+{% block content %}<style>
+.pet-detail-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+.pet-detail-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.pet-profile-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.pet-profile-top {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+.pet-profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--pink-light), var(--cream));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+.pet-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.pet-profile-emoji {
+    font-size: 3rem;
+}
+.pet-profile-info {
+    flex: 1;
+    min-width: 0;
+}
+.pet-profile-info h1 {
+    font-size: 1.8rem;
+    color: var(--brown);
+    margin-bottom: 0.4rem;
+}
+.pet-profile-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+}
+.pet-profile-tags .tag {
+    background: var(--cream);
+    padding: 0.25rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+.tag-species {
+    background: var(--pink-light) !important;
+    color: var(--pink) !important;
+    font-weight: 600;
+}
+.pet-profile-details p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 0.2rem;
+    line-height: 1.6;
+}
+.pet-notes {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    color: var(--text-light);
+}
+.pet-profile-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+.pet-health-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 2rem;
+}
+.pet-health-left,
+.pet-health-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.health-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.health-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+.health-card-header h3 {
+    font-size: 1rem;
+    color: var(--brown);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+}
+.inline-form input,
+.inline-form select,
+.inline-form textarea {
+    padding: 0.45rem 0.7rem;
+    border: 1.5px solid #eee;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    outline: none;
+    background: white;
+    transition: border-color 0.25s;
+    flex: 1;
+    min-width: 120px;
+}
+.inline-form input:focus,
+.inline-form select:focus,
+.inline-form textarea:focus {
+    border-color: var(--pink);
+}
+.inline-form textarea {
+    width: 100%;
+    min-height: 50px;
+    resize: vertical;
+}
+.hidden { display: none !important; }
+.weight-chart-container {
+    height: 200px;
+    margin-bottom: 1rem;
+}
+.weight-history {
+    padding-top: 0.5rem;
+    border-top: 1px solid #f0f0f0;
+}
+.weight-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    font-size: 0.82rem;
+    color: var(--text-light);
+}
+.weight-row strong {
+    color: var(--text);
+}
+.weight-note {
+    color: var(--text-light);
+    font-size: 0.75rem;
+    flex: 1;
+}
+.record-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.record-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius-sm);
+    background: var(--cream);
+    transition: background 0.2s;
+}
+.record-item:hover {
+    background: var(--pink-light);
+}
+.record-icon {
+    font-size: 1rem;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+    padding-top: 0.1rem;
+}
+.record-info {
+    flex: 1;
+    min-width: 0;
+}
+.record-info strong {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+.record-info span {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    display: block;
+}
+.record-meta {
+    font-size: 0.7rem;
+    color: var(--text-light);
+    margin-top: 0.1rem;
+}
+.vacc-item { border-left: 3px solid var(--pink); }
+.deworm-item { border-left: 3px solid var(--mint); }
+.remind-item { border-left: 3px solid var(--lavender); }
+.btn-done,
+.btn-del {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+.btn-done {
+    background: var(--mint);
+    color: white;
+}
+.btn-done:hover { background: #5a9e7e; }
+.btn-del {
+    background: transparent;
+    color: var(--text-light);
+}
+.btn-del:hover { background: var(--coral); color: white; }
+.btn-done-sm,
+.btn-del-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.btn-done-sm {
+    background: var(--mint-light);
+    color: var(--mint);
+}
+.btn-done-sm:hover { background: var(--mint); color: white; }
+.btn-del-sm {
+    background: transparent;
+    color: var(--text-light);
+}
+.btn-del-sm:hover { background: #FFE8EC; color: var(--coral); }
+.record-actions-sm {
+    display: flex;
+    gap: 0.2rem;
+    flex-shrink: 0;
+}
+.quick-actions h3 {
+    margin-bottom: 0.8rem;
+}
+.quick-action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+.quick-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.7rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--cream);
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: all 0.25s;
+}
+.quick-action-btn:hover {
+    background: var(--pink-light);
+    color: var(--pink);
+}
+.quick-action-btn.danger:hover {
+    background: #FFE8EC;
+    color: var(--coral);
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+}
+.form-half { grid-column: span 1; }
+.form-full { grid-column: 1 / -1; }
+.form-grid .form-group { margin-bottom: 0; }
+</style>
+<div class="pet-detail-page">
+    <div class="pet-detail-container">
+
+        <!-- 上方：宠物档案卡片 -->
+        <div class="pet-profile-card">
+            <div class="pet-profile-top">
+                <div class="pet-profile-avatar">
+                    {% if pet.avatar_url %}
+                        <img src="{{ pet.avatar_url }}" alt="{{ pet.name }}">
+                    {% else %}
+                        <span class="pet-profile-emoji">
+                            {% if pet.species == 'dog' %}🐶{% elif pet.species == 'cat' %}🐱{% elif pet.species == 'rabbit' %}🐰{% elif pet.species == 'bird' %}🐦{% elif pet.species == 'hamster' %}🐹{% elif pet.species == 'turtle' %}🐢{% elif pet.species == 'fish' %}🐟{% else %}🐾{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+                <div class="pet-profile-info">
+                    <h1>{{ pet.name }}</h1>
+                    <div class="pet-profile-tags">
+                        <span class="tag tag-species">{{ pet.get_species_display }}</span>
+                        {% if pet.breed %}<span class="tag">{{ pet.breed }}</span>{% endif %}
+                        <span class="tag">{{ pet.get_gender_display }}</span>
+                        {% if pet.age %}<span class="tag">🎂 {{ pet.age }}</span>{% endif %}
+                    </div>
+                    <div class="pet-profile-details">
+                        {% if pet.birthday %}<p>🎂 生日：{{ pet.birthday|date:"Y年m月d日" }}</p>{% endif %}
+                        {% if pet.adopted_date %}<p>🏠 接回家：{{ pet.adopted_date|date:"Y年m月d日" }}</p>{% endif %}
+                        {% if pet.color %}<p>🎨 毛色：{{ pet.color }}</p>{% endif %}
+                        {% if pet.microchip_id %}<p>🔖 芯片号：{{ pet.microchip_id }}</p>{% endif %}
+                        {% if pet.latest_weight %}<p>⚖️ 最新体重：<strong>{{ pet.latest_weight }}kg</strong></p>{% endif %}
+                    </div>
+                    {% if pet.notes %}
+                        <div class="pet-notes">
+                            <p>📝 {{ pet.notes }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="pet-profile-actions">
+                    <a href="{% url 'pets:pet_edit' pet.pk %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;">✏️ 编辑</a>
+                    <a href="{% url 'pets:generate_reminders' pet.pk %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;">🤖 智能生成日历</a>
+                    <a href="{% url 'pets:profile' %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.8rem;background:transparent;color:var(--text-light);border-radius:50px;text-decoration:none;font-size:0.8rem;">← 返回</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 下方：左侧健康记录 + 右侧提醒 -->
+        <div class="pet-health-grid">
+            <!-- 左侧 -->
+            <div class="pet-health-left">
+
+                <!-- 体重曲线 -->
+                <div class="health-card">
+                    <div class="health-card-header">
+                        <h3>⚖️ 体重曲线</h3>
+                        <button style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;" onclick="document.getElementById('weight-form').classList.toggle('hidden')">+ 记录体重</button>
+                    </div>
+
+                    <form id="weight-form" method="post" action="{% url 'pets:add_weight' pet.pk %}" class="inline-form hidden">
+                        {% csrf_token %}
+                        <input type="number" name="weight" step="0.01" placeholder="体重(kg)" required>
+                        <input type="date" name="recorded_at" value="{% now "Y-m-d" %}">
+                        <input type="text" name="notes" placeholder="备注(可选)">
+                        <button type="submit" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;">记录</button>
+                    </form>
+
+                    {% if weight_records %}
+                    <div class="weight-chart-container">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                    <div class="weight-history">
+                        <p style="color:var(--text-light);font-size:0.8rem;">最近5次：</p>
+                        {% for w in weight_records|slice:":5" %}
+                        <div class="weight-row">
+                            <span>{{ w.recorded_at|date:"m/d" }}</span>
+                            <span><strong>{{ w.weight }}kg</strong></span>
+                            {% if w.notes %}<span class="weight-note">{{ w.notes }}</span>{% endif %}
+                            <a href="{% url 'pets:delete_weight' w.pk %}" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:transparent;color:var(--text-light);border-radius:50%;text-decoration:none;font-size:0.75rem;" onclick="return confirm('删除这条体重记录？')">×</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <p style="font-size:0.85rem;">还没有体重记录，开始记录吧 ⚖️</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- 疫苗接种 -->
+                <div class="health-card">
+                    <div class="health-card-header">
+                        <h3>💉 疫苗接种</h3>
+                        <button style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;" onclick="document.getElementById('vacc-form').classList.toggle('hidden')">+ 添加接种</button>
+                    </div>
+
+                    <form id="vacc-form" method="post" action="{% url 'pets:add_vaccination' pet.pk %}" class="inline-form hidden">
+                        {% csrf_token %}
+                        <select name="vaccine_type" required>
+                            <option value="">选择疫苗类型</option>
+                            <option value="rabies">狂犬疫苗</option>
+                            <option value="dhpp">犬四联</option>
+                            <option value="dhpp_plus">犬八联</option>
+                            <option value="fvrpc">猫三联</option>
+                            <option value="felv">猫白血病疫苗</option>
+                            <option value="other">其他</option>
+                        </select>
+                        <input type="text" name="vaccine_name" placeholder="疫苗名称(如卫佳伍)">
+                        <input type="number" name="dose_number" placeholder="第几针" value="1" min="1">
+                        <input type="date" name="administered_date" required>
+                        <input type="date" name="next_due_date" placeholder="下次接种日期">
+                        <input type="text" name="clinic" placeholder="接种医院">
+                        <button type="submit" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;">添加</button>
+                    </form>
+
+                    {% if vaccinations %}
+                    <div class="record-list">
+                        {% for v in vaccinations %}
+                        <div class="record-item vacc-item">
+                            <div class="record-icon">💉</div>
+                            <div class="record-info">
+                                <strong>{{ v.get_vaccine_type_display }}</strong>
+                                <span>第{{ v.dose_number }}针 · {{ v.administered_date|date:"Y-m-d" }}</span>
+                                {% if v.vaccine_name %}<span class="record-meta">{{ v.vaccine_name }}</span>{% endif %}
+                                {% if v.next_due_date %}<span class="record-meta">下次：{{ v.next_due_date|date:"Y-m-d" }}</span>{% endif %}
+                            </div>
+                            <a href="{% url 'pets:delete_vaccination' v.pk %}" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:transparent;color:var(--text-light);border-radius:50%;text-decoration:none;font-size:0.75rem;" onclick="return confirm('删除此疫苗记录？')">×</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <p style="font-size:0.85rem;">还没有疫苗接种记录 💉</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- 驱虫记录 -->
+                <div class="health-card">
+                    <div class="health-card-header">
+                        <h3>🪱 驱虫记录</h3>
+                        <button style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;" onclick="document.getElementById('deworm-form').classList.toggle('hidden')">+ 添加驱虫</button>
+                    </div>
+
+                    <form id="deworm-form" method="post" action="{% url 'pets:add_deworming' pet.pk %}" class="inline-form hidden">
+                        {% csrf_token %}
+                        <select name="deworming_type" required>
+                            <option value="">选择驱虫类型</option>
+                            <option value="internal">体内驱虫</option>
+                            <option value="external">体外驱虫</option>
+                            <option value="both">体内外同驱</option>
+                        </select>
+                        <input type="text" name="product_name" placeholder="药品名称(如大宠爱)">
+                        <input type="date" name="administered_date" required>
+                        <input type="date" name="next_due_date" placeholder="下次驱虫日期">
+                        <button type="submit" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;">添加</button>
+                    </form>
+
+                    {% if dewormings %}
+                    <div class="record-list">
+                        {% for d in dewormings %}
+                        <div class="record-item deworm-item">
+                            <div class="record-icon">🪱</div>
+                            <div class="record-info">
+                                <strong>{{ d.get_deworming_type_display }}</strong>
+                                <span>{{ d.administered_date|date:"Y-m-d" }}</span>
+                                {% if d.product_name %}<span class="record-meta">{{ d.product_name }}</span>{% endif %}
+                                {% if d.next_due_date %}<span class="record-meta">下次：{{ d.next_due_date|date:"Y-m-d" }}</span>{% endif %}
+                            </div>
+                            <a href="{% url 'pets:delete_deworming' d.pk %}" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:transparent;color:var(--text-light);border-radius:50%;text-decoration:none;font-size:0.75rem;" onclick="return confirm('删除此驱虫记录？')">×</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <p style="font-size:0.85rem;">还没有驱虫记录 🪱</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 右侧：提醒列表 -->
+            <div class="pet-health-right">
+                <div class="health-card">
+                    <div class="health-card-header">
+                        <h3>📌 待办提醒</h3>
+                        <button style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;" onclick="document.getElementById('remind-form').classList.toggle('hidden')">+ 添加</button>
+                    </div>
+
+                    <form id="remind-form" method="post" action="{% url 'pets:add_reminder' pet.pk %}" class="inline-form hidden">
+                        {% csrf_token %}
+                        <select name="reminder_type">
+                            <option value="custom">📌 自定义</option>
+                            <option value="vaccination">💉 疫苗接种</option>
+                            <option value="deworming">🪱 驱虫</option>
+                            <option value="nails">💅 剪指甲</option>
+                            <option value="bath">🛁 洗澡</option>
+                            <option value="grooming">✂️ 美容</option>
+                            <option value="checkup">🏥 体检</option>
+                            <option value="teeth">🦷 刷牙</option>
+                            <option value="weight">⚖️ 称体重</option>
+                        </select>
+                        <input type="text" name="title" placeholder="提醒标题" required>
+                        <input type="date" name="reminder_date" required>
+                        <input type="number" name="repeat_interval_days" placeholder="重复间隔(天)，留空不重复">
+                        <textarea name="description" placeholder="详细说明(可选)"></textarea>
+                        <button type="submit" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;">添加提醒</button>
+                    </form>
+
+                    {% if reminders %}
+                    <div class="record-list reminder-list">
+                        {% for r in reminders %}
+                        <div class="record-item remind-item">
+                            <div class="record-icon">
+                                {% if r.reminder_type == 'vaccination' %}💉{% elif r.reminder_type == 'deworming' %}🪱{% elif r.reminder_type == 'nails' %}💅{% elif r.reminder_type == 'bath' %}🛁{% elif r.reminder_type == 'grooming' %}✂️{% elif r.reminder_type == 'checkup' %}🏥{% elif r.reminder_type == 'teeth' %}🦷{% elif r.reminder_type == 'weight' %}⚖️{% elif r.reminder_type == 'feed' %}🍖{% else %}📌{% endif %}
+                            </div>
+                            <div class="record-info">
+                                <strong>{{ r.title }}</strong>
+                                <span>{{ r.reminder_date|date:"Y-m-d" }}</span>
+                                {% if r.description %}<span class="record-meta">{{ r.description|truncatechars:30 }}</span>{% endif %}
+                                {% if r.repeat_interval_days %}<span class="record-meta" style="color:var(--mint);">🔄 每{{ r.repeat_interval_days }}天</span>{% endif %}
+                            </div>
+                            <div class="record-actions-sm">
+                                <a href="{% url 'pets:complete_reminder' r.pk %}?next=pets:pet_detail&pk={{ pet.pk }}" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--mint-light);color:var(--mint);border-radius:50%;text-decoration:none;font-size:0.75rem;" title="标记完成">✓</a>
+                                <a href="{% url 'pets:delete_reminder' r.pk %}?next=pets:pet_detail&pk={{ pet.pk }}" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:transparent;color:var(--text-light);border-radius:50%;text-decoration:none;font-size:0.75rem;" onclick="return confirm('删除这条提醒？')">×</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <p style="font-size:0.85rem;">暂无待办提醒</p>
+                        <p style="font-size:0.8rem;color:var(--text-light);">使用「智能生成日历」一键创建 📅</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- 快捷操作 -->
+                <div class="health-card quick-actions">
+                    <h3>⚡ 快捷操作</h3>
+                    <div class="quick-action-grid">
+                        <a href="{% url 'pets:add_weight' pet.pk %}" style="display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.7rem 0.5rem;background:var(--cream);border-radius:12px;text-decoration:none;color:var(--text);font-size:0.82rem;font-weight:500;" onclick="event.preventDefault();document.getElementById('weight-form').classList.toggle('hidden')">
+                            ⚖️ 称体重
+                        </a>
+                        <a href="{% url 'pets:generate_reminders' pet.pk %}" style="display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.7rem 0.5rem;background:var(--cream);border-radius:12px;text-decoration:none;color:var(--text);font-size:0.82rem;font-weight:500;">
+                            🤖 智能日历
+                        </a>
+                        <a href="{% url 'pets:pet_edit' pet.pk %}" style="display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.7rem 0.5rem;background:var(--cream);border-radius:12px;text-decoration:none;color:var(--text);font-size:0.82rem;font-weight:500;">
+                            ✏️ 编辑档案
+                        </a>
+                        <a href="{% url 'pets:pet_delete' pet.pk %}" style="display:flex;align-items:center;justify-content:center;gap:0.3rem;padding:0.7rem 0.5rem;background:var(--pink-light);color:var(--coral);border-radius:12px;text-decoration:none;font-size:0.82rem;font-weight:500;" onclick="return confirm('确定要删除 {{ pet.name }} 的档案吗？此操作不可撤销！')">
+                            🗑️ 删除
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = {{ weight_chart_labels|safe }};
+    const data = {{ weight_chart_data|safe }};
+    if (labels.length > 0 && document.getElementById('weightChart')) {
+        new Chart(document.getElementById('weightChart'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '体重(kg)',
+                    data: data,
+                    borderColor: '#FF6B8A',
+                    backgroundColor: 'rgba(255, 107, 138, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#FF6B8A',
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

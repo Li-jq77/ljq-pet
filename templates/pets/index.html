@@ -1,0 +1,346 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}🐾 里脊球的宠物店 - 找到你的专属毛孩子{% endblock %}
+
+{% block extra_css %}
+<style>
+/* 全局主题色变量 */
+:root {
+    --pink: #FF8CA0;
+    --coral: #FF6B7F;
+    --cream: #FFF3F5;
+    --text-light: #777;
+    --text-dark: #333;
+}
+
+/* ====== Hero Banner 顶部横幅 ====== */
+.hero-banner {
+    height: 380px;
+    background: linear-gradient(135deg, #FFE8EC 0%, #FFB5C2 50%, #FF9AAE 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 0 0 24px 24px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+.hero-text h1 {
+    font-size: 2.8rem;
+    color: white;
+    text-shadow: 0 2px 15px rgba(0,0,0,0.15);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+.hero-text p {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.1);
+    line-height: 1.7;
+}
+@media (max-width: 768px) {
+    .hero-banner { height: 280px; }
+    .hero-text h1 { font-size: 2rem; }
+}
+
+/* ====== 页面通用区块间距 ====== */
+section {
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    padding: 0 1.2rem;
+}
+.section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: var(--text-dark);
+}
+
+/* ====== 品种分类卡片 ====== */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+}
+.category-card {
+    background: #fff;
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(255,107,138,0.12);
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    transition: 0.3s ease;
+}
+.category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255,107,138,0.2);
+}
+.cat-icon {
+    font-size: 2.2rem;
+    display: block;
+    margin-bottom: 0.6rem;
+}
+.category-card h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.1rem;
+}
+.category-card p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin: 0;
+}
+@media (max-width: 1024px) {
+    .category-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .category-grid { grid-template-columns: 1fr; }
+}
+
+/* ====== 宠物卡片网格 ====== */
+.dog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+.dog-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 12px rgba(255,107,138,0.15);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.dog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(255,107,138,0.25);
+}
+.dog-card .dog-img-wrapper {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+}
+.dog-card .dog-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: var(--cream);
+    transition: transform 0.3s;
+}
+.dog-card:hover .dog-img {
+    transform: scale(1.05);
+}
+.dog-card .dog-info {
+    padding: 1rem 1.2rem 1.2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.dog-card .dog-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+.dog-card .dog-category {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+.dog-card .dog-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: auto;
+}
+.dog-card .tag {
+    background: var(--cream);
+    padding: 0.15rem 0.7rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+.dog-card .dog-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--coral);
+    margin-top: 0.5rem;
+}
+.dog-card .dog-price small {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-light);
+}
+.dog-card .popular-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, var(--coral), var(--pink));
+    color: white;
+    padding: 0.25rem 0.7rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255,94,94,0.3);
+}
+@media (max-width: 1024px) {
+    .dog-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .dog-grid { grid-template-columns: 1fr; }
+}
+
+/* ====== 空数据提示文字 ====== */
+.grid-empty-tip {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-light);
+    padding: 3rem 0;
+    font-size: 1rem;
+}
+
+/* ====== 店铺地址区块 ====== */
+.address-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+.address-line {
+    margin: 0;
+    font-size: 1.05rem;
+}
+.address-tags {
+    margin: 0.8rem 0;
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+.address-tip {
+    margin-top: 0.8rem;
+    color: var(--pink);
+    font-weight: 500;
+    font-size: 1rem;
+}
+.address-map img {
+    width: 100%;
+    border-radius: 16px;
+    display: block;
+}
+@media (max-width: 768px) {
+    .address-container { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="page-container">
+    <!-- 顶部横幅 -->
+    <section class="hero-banner">
+        <div class="hero-text">
+            <h1>🐶 找到属于你的毛孩子</h1>
+            <p>每一个品种都有独一无二的性格<br>来认识一下这些可爱的小生命吧 💕</p>
+        </div>
+    </section>
+
+    <!-- 品种分类 -->
+    <section class="categories-section">
+        <h2 class="section-title">品种分类</h2>
+        <div class="category-grid">
+            {% for cat in categories %}
+                <a href="{% url 'pets:category' cat.slug %}" class="category-card">
+                    <span class="cat-icon">{{ cat.icon }}</span>
+                    <h3>{{ cat.name }}</h3>
+                    <p>{{ cat.description|default:'点击查看该分类下的狗狗' }}</p>
+                </a>
+            {% empty %}
+                <p class="grid-empty-tip">暂无分类数据 🐾</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 热门推荐 -->
+    {% if popular_dogs %}
+    <section class="dog-section">
+        <h2 class="section-title">热门推荐</h2>
+        <div class="dog-grid">
+            {% for dog in popular_dogs %}
+                <a href="{% url 'pets:dog_detail' dog.pk %}" class="dog-card">
+                    <div class="dog-img-wrapper">
+                        <span class="popular-badge">🔥 热门</span>
+                        <img class="dog-img" src="{{ dog.image_url }}" alt="{{ dog.name }}" loading="lazy">
+                    </div>
+                    <div class="dog-info">
+                        <div class="dog-name">{{ dog.name }}</div>
+                        <div class="dog-category">{{ dog.category.icon }} {{ dog.category.name }}</div>
+                        <div class="dog-tags">
+                            {% if dog.origin %}
+                                <span class="tag">🌍 {{ dog.origin }}</span>
+                            {% endif %}
+                            {% if dog.lifespan %}
+                                <span class="tag">⏳ {{ dog.lifespan }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="dog-price">¥{{ dog.price }} <small>起</small></div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 全部宠物列表 -->
+    <section class="dog-section">
+        <h2 class="section-title">猫猫狗狗大家庭</h2>
+        <div class="dog-grid">
+            {% for dog in dogs %}
+                <a href="{% url 'pets:dog_detail' dog.pk %}" class="dog-card">
+                    <div class="dog-img-wrapper">
+                        <img class="dog-img" src="{{ dog.image_url }}" alt="{{ dog.name }}" loading="lazy">
+                    </div>
+                    <div class="dog-info">
+                        <div class="dog-name">{{ dog.name }}</div>
+                        <div class="dog-category">{{ dog.category.icon }} {{ dog.category.name }}</div>
+                        <div class="dog-tags">
+                            {% if dog.weight %}
+                                <span class="tag">⚖️ {{ dog.weight }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="dog-price">¥{{ dog.price }} <small>起</small></div>
+                    </div>
+                </a>
+            {% empty %}
+                <p class="grid-empty-tip">还没有宠物数据哦，去后台添加吧！🐶😺</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 店铺地址 -->
+    <section class="address-section">
+        <h2 class="section-title">店铺地址</h2>
+        <div class="address-container">
+            <div class="address-info">
+                <p class="address-line">🏠 广东省广州市花都区培正路53号</p>
+                <div class="address-tags">
+                    <span class="tag">🚌 乘坐713路 → 广东培正学院总站</span>
+                    <span class="tag">🕐 9:00 - 21:00</span>
+                </div>
+                <p class="address-tip">😊 欢迎来店里撸猫撸狗！随时预约参观～</p>
+            </div>
+            <div class="address-map">
+                {% static 'images/里脊球的宠物店.jpg' as map_url %}
+                <img src="{{ map_url }}" alt="店铺位置地图">
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

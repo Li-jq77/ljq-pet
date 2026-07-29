@@ -1,0 +1,49 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+{% block title %}{{ post.title }} - 宠友圈{% endblock %}
+{% block content %}
+<div style="padding:2rem;max-width:700px;margin:0 auto;">
+    <a href="{% url 'pets:post_list' %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.4rem 1rem;background:white;color:var(--text-light);border-radius:50px;text-decoration:none;font-size:0.85rem;box-shadow:0 2px 10px var(--shadow);margin-bottom:1.5rem;">← 返回列表</a>
+
+    <div style="background:white;border-radius:24px;padding:2rem;box-shadow:0 4px 20px var(--shadow);margin-bottom:1.5rem;">
+        <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.5rem;">
+            <span style="padding:0.2rem 0.6rem;border-radius:50px;background:var(--pink-light);color:var(--pink);font-size:0.75rem;">{% if post.category == 'help' %}🆘 求助{% else %}🙌 分享{% endif %}</span>
+            <span style="margin-left:0.5rem;">{{ post.author.username }}</span>
+            <span style="margin-left:0.5rem;">{{ post.created_at|date:"Y-m-d H:i" }}</span>
+        </div>
+        <h1 style="font-size:1.3rem;color:var(--brown);margin-bottom:1rem;">{{ post.title }}</h1>
+        <p style="line-height:1.8;color:var(--text);font-size:0.95rem;">{{ post.content|linebreaksbr }}</p>
+        {% if post.image_url %}<img src="{{ post.image_url }}" style="max-width:100%;border-radius:12px;margin-top:1rem;">{% endif %}
+    </div>
+
+    <div style="background:white;border-radius:24px;padding:1.5rem;box-shadow:0 4px 20px var(--shadow);">
+        <h3 style="font-size:1rem;color:var(--brown);margin-bottom:1rem;">💬 评论 ({{ comments|length }})</h3>
+
+        {% if user.is_authenticated %}
+        <form method="post" style="margin-bottom:1.5rem;">
+            {% csrf_token %}
+            <textarea name="content" rows="3" placeholder="写下你的评论..." style="width:100%;padding:0.7rem;border:1.5px solid #eee;border-radius:12px;font-size:0.9rem;outline:none;background:var(--cream);resize:vertical;box-sizing:border-box;" required></textarea>
+            <button type="submit" style="margin-top:0.5rem;padding:0.4rem 1rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border:none;border-radius:50px;font-weight:600;cursor:pointer;font-size:0.85rem;">发表评论</button>
+        </form>
+        {% else %}
+        <p style="text-align:center;color:var(--text-light);font-size:0.85rem;margin-bottom:1rem;"><a href="{% url 'pets:login' %}?next={{ request.path }}" style="color:var(--pink);">登录</a>后可以评论</p>
+        {% endif %}
+
+        {% if comments %}
+        <div style="display:grid;gap:0.8rem;">
+            {% for comment in comments %}
+            <div style="padding:0.8rem;background:var(--cream);border-radius:12px;">
+                <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.3rem;">
+                    <strong style="color:var(--text);">{{ comment.author.username }}</strong>
+                    <span style="margin-left:0.5rem;">{{ comment.created_at|date:"m/d H:i" }}</span>
+                </div>
+                <p style="font-size:0.9rem;color:var(--text);">{{ comment.content }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align:center;color:var(--text-light);font-size:0.85rem;">暂无评论，来抢沙发吧 🛋️</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

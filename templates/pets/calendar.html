@@ -1,0 +1,275 @@
+﻿{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}📅 智能日程提醒 - 里脊球的宠物店{% endblock %}
+
+{% block content %}<style>
+.calendar-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+.calendar-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.calendar-header h1 {
+    font-size: 1.8rem;
+    color: var(--brown);
+    margin-bottom: 0.3rem;
+}
+.calendar-header p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+.calendar-nav h2 {
+    font-size: 1.3rem;
+    color: var(--brown);
+    font-weight: 700;
+}
+.calendar-grid {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    margin-bottom: 2rem;
+}
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--cream);
+    padding: 0.8rem 0;
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-light);
+}
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.cal-day {
+    min-height: 120px;
+    padding: 0.5rem;
+    border-right: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    position: relative;
+    transition: background 0.2s;
+}
+.cal-day:nth-child(7n) { border-right: none; }
+.cal-day:hover { background: var(--cream); }
+.cal-day.empty { background: #fafafa; }
+.cal-day.past { opacity: 0.5; }
+.cal-day.today {
+    background: var(--pink-light);
+    box-shadow: inset 0 0 0 2px var(--pink);
+}
+.cal-day-number {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.cal-today-badge {
+    font-size: 0.55rem;
+    background: var(--pink);
+    color: white;
+    padding: 0.05rem 0.3rem;
+    border-radius: 50px;
+}
+.cal-day-reminders {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+.cal-reminder-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    background: var(--cream);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.cal-reminder-chip.vaccination { background: #FFE8EC; }
+.cal-reminder-chip.deworming { background: #E0F5EC; }
+.cal-reminder-chip.checkup { background: #E8F0FF; }
+.chip-icon { font-size: 0.55rem; }
+.chip-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.cal-more {
+    font-size: 0.6rem;
+    color: var(--pink);
+    font-weight: 600;
+    text-align: center;
+}
+.calendar-reminder-list {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.calendar-reminder-list h3 {
+    font-size: 1.1rem;
+    color: var(--brown);
+    margin-bottom: 1rem;
+}
+.reminder-table {
+    display: flex;
+    flex-direction: column;
+}
+.reminder-table-row {
+    display: grid;
+    grid-template-columns: 50px 40px 30px 80px 1fr 30px;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 0.82rem;
+    transition: background 0.2s;
+}
+.reminder-table-row:hover { background: var(--cream); }
+.reminder-table-row.completed {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+.reminder-table-date {
+    font-weight: 600;
+    color: var(--text);
+}
+.reminder-table-weekday {
+    color: var(--text-light);
+    font-size: 0.75rem;
+}
+.reminder-table-icon { text-align: center; }
+.reminder-table-pet {
+    color: var(--pink);
+    font-weight: 600;
+}
+.reminder-table-title { color: var(--text-light); }
+.reminder-table-actions { text-align: center; }
+.done-mark { font-size: 0.75rem; }
+
+/* ====== Responsive ====== */
+@media (max-width: 1024px) {
+    .profile-body { grid-template-columns: 1fr; }
+    .pet-health-grid { grid-template-columns: 1fr; }
+    .reminder-weekly { flex-wrap: wrap; }
+    .reminder-day { min-width: calc(25% - 0.5rem); flex: 1 1 auto; }
+    .cal-day { min-height: 100px; }
+    .reminder-table-row { grid-template-columns: 40px 35px 25px 60px 1fr 30px; font-size: 0.75rem; }
+}
+@media (max-width: 768px) {
+    .profile-header-content { flex-direction: column; text-align: center; }
+    .profile-header-actions { justify-content: center; }
+    .pet-profile-top { flex-direction: column; align-items: center; text-align: center; }
+    .pet-profile-actions { justify-content: center; }
+    .form-grid { grid-template-columns: 1fr; }
+    .reminder-day { min-width: calc(33% - 0.5rem); }
+    .cal-day { min-height: 80px; padding: 0.3rem; }
+    .cal-day-number { font-size: 0.75rem; }
+    .cal-reminder-chip { font-size: 0.5rem; }
+    .reminder-table-row { grid-template-columns: 36px auto 25px; gap: 0.3rem; }
+    .reminder-table-weekday, .reminder-table-icon { display: none; }
+    .quick-action-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    .profile-page,
+</style>
+<div class="calendar-page">
+    <div class="calendar-header">
+        <h1>📅 养宠日历</h1>
+        <p>一站式查看所有毛孩子的日程提醒</p>
+    </div>
+
+    <!-- 月份导航 -->
+    <div class="calendar-nav">
+        <a href="?year={{ prev_year }}&month={{ prev_month }}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;">‹ 上月</a>
+        <h2>{{ cur_month_name }} {{ cur_year }}</h2>
+        <a href="?year={{ next_year }}&month={{ next_month }}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.9rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.8rem;">下月 ›</a>
+    </div>
+
+    <!-- 日历网格 -->
+    <div class="calendar-grid">
+        <div class="calendar-weekdays">
+            <span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span>
+        </div>
+        <div class="calendar-days">
+            {% for day in calendar_days %}
+                {% if day is None %}
+                    <div class="cal-day empty"></div>
+                {% else %}
+                    <div class="cal-day {% if day.is_today %}today{% endif %} {% if day.is_past %}past{% endif %} {% if day.reminders %}has-reminders{% endif %}">
+                        <div class="cal-day-number">
+                            {{ day.day }}
+                            {% if day.is_today %}<span class="cal-today-badge">今天</span>{% endif %}
+                        </div>
+                        <div class="cal-day-reminders">
+                            {% for r in day.reminders|slice:":3" %}
+                            <div class="cal-reminder-chip {{ r.reminder_type }}">
+                                <span class="chip-icon">
+                                    {% if r.reminder_type == 'vaccination' %}💉{% elif r.reminder_type == 'deworming' %}🪱{% elif r.reminder_type == 'nails' %}💅{% elif r.reminder_type == 'bath' %}🛁{% elif r.reminder_type == 'grooming' %}✂️{% elif r.reminder_type == 'checkup' %}🏥{% elif r.reminder_type == 'teeth' %}🦷{% elif r.reminder_type == 'weight' %}⚖️{% elif r.reminder_type == 'feed' %}🍖{% else %}📌{% endif %}
+                                </span>
+                                <span class="chip-text">{{ r.pet.name }}: {{ r.title|truncatechars:8 }}</span>
+                            </div>
+                            {% endfor %}
+                            {% if day.reminders|length > 3 %}
+                            <div class="cal-more">+{{ day.reminders|length|add:"-3" }} 更多</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- 当月提醒列表 -->
+    <div class="calendar-reminder-list">
+        <h3>📋 本月所有提醒</h3>
+        {% if reminders %}
+        <div class="reminder-table">
+            {% for r in reminders %}
+            <div class="reminder-table-row {% if r.is_completed %}completed{% endif %}">
+                <div class="reminder-table-date">{{ r.reminder_date|date:"m/d" }}</div>
+                <div class="reminder-table-weekday">{{ r.reminder_date|date:"D" }}</div>
+                <div class="reminder-table-icon">
+                    {% if r.reminder_type == 'vaccination' %}💉{% elif r.reminder_type == 'deworming' %}🪱{% elif r.reminder_type == 'nails' %}💅{% elif r.reminder_type == 'bath' %}🛁{% elif r.reminder_type == 'grooming' %}✂️{% elif r.reminder_type == 'checkup' %}🏥{% elif r.reminder_type == 'teeth' %}🦷{% elif r.reminder_type == 'weight' %}⚖️{% elif r.reminder_type == 'feed' %}🍖{% else %}📌{% endif %}
+                </div>
+                <div class="reminder-table-pet">{{ r.pet.name }}</div>
+                <div class="reminder-table-title">{{ r.title }}</div>
+                <div class="reminder-table-actions">
+                    {% if not r.is_completed %}
+                    <a href="{% url 'pets:complete_reminder' r.pk %}?next=pets:calendar" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--mint-light);color:var(--mint);border-radius:50%;text-decoration:none;font-size:0.75rem;" title="标记完成">✓</a>
+                    {% else %}
+                    <span class="done-mark">✅</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="empty-icon">🎉</span>
+            <p>本月没有提醒</p>
+            <p style="color:var(--text-light);font-size:0.85rem;">去宠物档案页面使用「智能生成日历」功能 📅</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

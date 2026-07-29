@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - 🐾 里脊球的宠物店</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'pets:index' %}" class="navbar-brand">
+            <span class="paw">🐾</span>
+            里脊球的宠物店
+        </a>
+        <div style="display:flex;align-items:center;">
+            <ul class="nav-links">
+                <li><a href="{% url 'pets:index' %}" {% if request.resolver_match.url_name == 'index' %}class="active"{% endif %}>🏠 首页</a></li>
+
+                <!-- 狗狗下拉 -->
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">🐶 狗狗</a>
+                    <div class="dropdown-content">
+                        {% for cat in dog_categories %}
+                        <a href="{% url 'pets:category' cat.slug %}">{{ cat.icon }} {{ cat.name }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+
+                <!-- 猫猫下拉 -->
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">😺 猫猫</a>
+                    <div class="dropdown-content">
+                        {% for cat in cat_categories %}
+                        <a href="{% url 'pets:category' cat.slug %}">{{ cat.icon }} {{ cat.name }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+
+                <!-- 相关产品下拉 -->
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">🛍️ 相关产品</a>
+                    <div class="dropdown-content" style="min-width:160px;">
+                        <a href="{% url 'pets:product_list' %}">📦 全部产品</a>
+                        <a href="{% url 'pets:product_category' 'vaccine' %}">💉 疫苗</a>
+                        <a href="{% url 'pets:product_category' 'food' %}">🍖 食品</a>
+                        <a href="{% url 'pets:product_category' 'toy' %}">🧸 玩具</a>
+                        <a href="{% url 'pets:product_category' 'accessory' %}">🎀 配件</a>
+                        <a href="{% url 'pets:product_category' 'health' %}">💊 保健品</a>
+                        <hr style="margin:0.3rem 0;border:none;border-top:1px solid #eee;">
+                        <a href="{% url 'pets:cart' %}" style="font-weight:600;color:var(--pink);">🛒 购物车</a>
+                        <a href="{% url 'pets:order_list' %}">📦 我的订单</a>
+                    </div>
+                </li>
+
+                <!-- 求助分享下拉 -->
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">📢 求助分享</a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'pets:post_list' %}">📋 所有帖子</a>
+                        <a href="{% url 'pets:post_create' %}">✏️ 发布帖子</a>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav-auth">
+                {% if user.is_authenticated %}
+                <a href="{% url 'pets:profile' %}" class="btn-auth btn-login" style="margin-right:0.5rem;">👤 个人中心</a>
+                <span class="btn-username">👋 {{ user.username }}</span>
+                <a href="{% url 'pets:logout' %}" class="btn-auth btn-logout">退出</a>
+                {% else %}
+                <a href="{% url 'pets:login' %}" class="btn-auth btn-login">登录</a>
+                <a href="{% url 'pets:register' %}" class="btn-auth btn-register">注册</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <p>🐾 里脊球的宠物店 &copy; 2026 | 用心守护每一只毛孩子 💕</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

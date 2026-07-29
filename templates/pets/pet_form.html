@@ -1,0 +1,41 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}{{ form_title }} - 里脊球的宠物店{% endblock %}
+
+{% block content %}
+<div style="padding:2rem;max-width: 800px;margin:0 auto;">
+    <div style="background:white;border-radius:24px;padding:2rem;box-shadow:0 4px 25px var(--shadow);">
+        <h2 style="text-align:center;font-size:1.3rem;color:var(--brown);margin-bottom:0.3rem;">{{ form_title }}</h2>
+        <p style="text-align:center;color:var(--text-light);font-size:0.85rem;margin-bottom:1.5rem;">{{ form_subtitle }}</p>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div style="margin-bottom:1rem;">
+                <label for="{{ field.id_for_label }}" style="display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.3rem;">{{ field.label }}</label>
+                {% if field.name == "species" or field.name == "gender" %}
+                <select id="{{ field.id_for_label }}" name="{{ field.name }}" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid #eee;border-radius:12px;font-size:0.9rem;outline:none;background:var(--cream);">
+                    {% for val, label in field.field.choices %}
+                    <option value="{{ val }}" {% if field.value == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                {% elif field.name == "notes" %}
+                <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" rows="3" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid #eee;border-radius:12px;font-size:0.9rem;outline:none;background:var(--cream);resize:vertical;">{{ field.value|default:"" }}</textarea>
+                {% else %}
+                <input type="{{ field.field.widget.input_type }}" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:"" }}" style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid #eee;border-radius:12px;font-size:0.9rem;outline:none;background:var(--cream);" {% if field.name == "birthday" %}placeholder="选填"{% endif %}>
+                {% endif %}
+                {% if field.errors %}<div style="color:var(--coral);font-size:0.8rem;margin-top:0.3rem;">{{ field.errors }}</div>{% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" style="width:100%;padding:0.7rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:0.5rem;">{{ submit_text }}</button>
+        </form>
+
+        <div style="text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--text-light);">
+            <a href="{% url 'pets:profile' %}" style="color:var(--pink);text-decoration:none;font-weight:600;">← 返回个人中心</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

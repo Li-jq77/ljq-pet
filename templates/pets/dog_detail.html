@@ -1,0 +1,85 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}{{ dog.name }} - 里脊球的宠物店{% endblock %}
+
+{% block content %}
+<section class="detail-section">
+    <a href="{% url 'pets:index' %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.5rem 1.2rem;background:white;color:var(--text-light);border-radius:50px;text-decoration:none;box-shadow:0 2px 10px var(--shadow);margin-bottom:1.5rem;font-size:0.85rem;font-weight:500;">← 返回首页</a>
+
+    <div class="detail-card">
+        <div class="detail-header">
+            <img class="detail-img" src="{{ dog.image_url|default:'https://placedog.net/500/400' }}" alt="{{ dog.name }}">
+            <div class="detail-title">
+                <h1>{{ dog.name }}</h1>
+                <div class="subtitle">{{ dog.category.icon }} {{ dog.category.name }}</div>
+                <div class="detail-price">¥{{ dog.price }} <small>起</small></div>
+
+                <div class="detail-meta">
+                    {% if dog.origin %}
+                    <div class="meta-item">
+                        <span class="label">🌍 原产地</span>
+                        <span class="value">{{ dog.origin }}</span>
+                    </div>
+                    {% endif %}
+                    {% if dog.weight %}
+                    <div class="meta-item">
+                        <span class="label">⚖️ 体重</span>
+                        <span class="value">{{ dog.weight }}</span>
+                    </div>
+                    {% endif %}
+                    {% if dog.height %}
+                    <div class="meta-item">
+                        <span class="label">📏 肩高</span>
+                        <span class="value">{{ dog.height }}</span>
+                    </div>
+                    {% endif %}
+                    {% if dog.lifespan %}
+                    <div class="meta-item">
+                        <span class="label">⏳ 寿命</span>
+                        <span class="value">{{ dog.lifespan }}</span>
+                    </div>
+                    {% endif %}
+                    {% if dog.color %}
+                    <div class="meta-item">
+                        <span class="label">🎨 毛色</span>
+                        <span class="value">{{ dog.color }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-body">
+            <h2>📖 品种介绍</h2>
+            <p>{{ dog.description|linebreaksbr }}</p>
+
+            {% if dog.temperament %}
+            <h2>💕 性格特点</h2>
+            <p>{{ dog.temperament|linebreaksbr }}</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% if related_dogs %}
+<section class="dog-section">
+    <h2 class="section-title">同分类推荐</h2>
+    <div class="dog-grid">
+        {% for related in related_dogs %}
+        <a href="{% url 'pets:dog_detail' related.pk %}" class="dog-card" style="text-decoration:none;color:inherit;">
+            <div class="dog-img-wrapper">
+                {% if related.is_popular %}<span class="popular-badge">🔥 热门</span>{% endif %}
+                <img class="dog-img" src="{{ related.image_url|default:'https://placedog.net/400/300' }}" alt="{{ related.name }}" loading="lazy">
+            </div>
+            <div class="dog-info">
+                <div class="dog-name">{{ related.name }}</div>
+                <div class="dog-category">{{ related.category.icon }} {{ related.category.name }}</div>
+                <div class="dog-price">¥{{ related.price }} <small>起</small></div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

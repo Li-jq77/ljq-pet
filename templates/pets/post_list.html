@@ -1,0 +1,39 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+{% block title %}📢 求助分享 - 里脊球的宠物店{% endblock %}
+{% block content %}
+<div style="padding:2rem;max-width: 1100px;margin:0 auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+        <h1 style="font-size:1.5rem;color:var(--brown);">📢 宠友圈</h1>
+        <a href="{% url 'pets:post_create' %}" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1.2rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.9rem;">✏️ 发布帖子</a>
+    </div>
+
+    {% if posts %}
+    <div style="display:grid;gap:1rem;">
+        {% for post in posts %}
+        <a href="{% url 'pets:post_detail' post.pk %}" style="display:block;background:white;border-radius:16px;padding:1.2rem;box-shadow:0 2px 12px var(--shadow);text-decoration:none;color:inherit;transition:all 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px var(--shadow-lg)'" onmouseout="this.style.boxShadow='0 2px 12px var(--shadow)'">
+            <div style="display:flex;align-items:flex-start;gap:1rem;">
+                <div style="font-size:2rem;width:48px;text-align:center;">{% if post.category == 'help' %}🆘{% else %}🙌{% endif %}</div>
+                <div style="flex:1;">
+                    <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.3rem;">
+                        <span style="font-size:0.75rem;padding:0.15rem 0.6rem;border-radius:50px;background:var(--pink-light);color:var(--pink);">{% if post.category == 'help' %}🆘 求助{% else %}🙌 分享{% endif %}</span>
+                        <span style="font-size:0.8rem;color:var(--text-light);">{{ post.author.username }}</span>
+                        <span style="font-size:0.75rem;color:var(--text-light);">{{ post.created_at|date:"m/d" }}</span>
+                    </div>
+                    <h3 style="font-size:1rem;font-weight:600;margin-bottom:0.3rem;">{{ post.title }}</h3>
+                    <p style="font-size:0.85rem;color:var(--text-light);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">{{ post.content }}</p>
+                    <div style="margin-top:0.5rem;font-size:0.8rem;color:var(--text-light);">💬 {{ post.comments.count }} 条评论</div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:3rem;background:white;border-radius:24px;box-shadow:0 2px 12px var(--shadow);">
+        <span style="font-size:3rem;display:block;margin-bottom:0.5rem;">📝</span>
+        <p style="color:var(--text-light);margin-bottom:1rem;">还没有帖子，来发布第一条吧！</p>
+        <a href="{% url 'pets:post_create' %}" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1.2rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.9rem;">✏️ 发布帖子</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
