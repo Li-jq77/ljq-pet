@@ -836,4 +836,999 @@
     "name": "小型犬",
     "slug": "small",
     "description": "体型小巧，适合公寓和城市生活",
-    "icon": 
+    "icon": "🐕",
+    "sort_order": 1,
+    "created_at": "2026-07-05T06:40:18.403Z"
+  }
+},
+{
+  "model": "pets.petcategory",
+  "pk": 2,
+  "fields": {
+    "name": "中型犬",
+    "slug": "medium",
+    "description": "活泼好动，适合有庭院的家庭",
+    "icon": "🐩",
+    "sort_order": 2,
+    "created_at": "2026-07-05T06:40:18.405Z"
+  }
+},
+{
+  "model": "pets.petcategory",
+  "pk": 3,
+  "fields": {
+    "name": "大型犬",
+    "slug": "large",
+    "description": "体型威武，需要充足活动空间",
+    "icon": "🦮",
+    "sort_order": 3,
+    "created_at": "2026-07-05T06:40:18.407Z"
+  }
+},
+{
+  "model": "pets.petcategory",
+  "pk": 4,
+  "fields": {
+    "name": "小型猫",
+    "slug": "small-cat",
+    "description": "体型小巧可爱的猫咪",
+    "icon": "😺",
+    "sort_order": 4,
+    "created_at": "2026-07-05T09:02:06.586Z"
+  }
+},
+{
+  "model": "pets.petcategory",
+  "pk": 5,
+  "fields": {
+    "name": "中型猫",
+    "slug": "medium-cat",
+    "description": "活泼好动的猫咪伴侣",
+    "icon": "🐱",
+    "sort_order": 5,
+    "created_at": "2026-07-05T09:02:06.592Z"
+  }
+},
+{
+  "model": "pets.petcategory",
+  "pk": 6,
+  "fields": {
+    "name": "大型猫",
+    "slug": "large-cat",
+    "description": "体型健壮的猫咪朋友",
+    "icon": "🐈",
+    "sort_order": 6,
+    "created_at": "2026-07-05T09:02:06.595Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 1,
+  "fields": {
+    "name": "柯基犬",
+    "category": 1,
+    "price": "5000.00",
+    "image_url": "/static/images/柯基犬.png",
+    "description": "柯基犬原产于英国威尔士，是一种小型牧羊犬。它们以短腿、大耳朵和活泼的性格而闻名。柯基聪明机警，对主人忠诚，非常适合家庭饲养。虽然体型小巧，但它们精力充沛，每天都需要适量的运动。",
+    "color": "黄白相间、三色",
+    "weight": "10-14kg",
+    "height": "25-30cm",
+    "lifespan": "12-15年",
+    "temperament": "活泼、聪明、勇敢、友善",
+    "origin": "英国（威尔士）",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.412Z",
+    "updated_at": "2026-07-20T09:00:32.387Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 2,
+  "fields": {
+    "name": "泰迪犬（贵宾犬）",
+    "category": 1,
+    "price": "3000.00",
+    "image_url": "/static/images/泰迪犬.png",
+    "description": "泰迪犬是迷你贵宾犬的俗称，因其可爱的泰迪熊造型而得名。它们智商极高，在犬类中排名第二，非常易于训练。泰迪掉毛极少，是很多过敏人群的理想选择。它们性格活泼友善，喜欢与人互动。",
+    "color": "白色、棕色、黑色、灰色",
+    "weight": "4-7kg",
+    "height": "24-28cm",
+    "lifespan": "12-17年",
+    "temperament": "聪明、活泼、友善、忠诚",
+    "origin": "法国/德国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.415Z",
+    "updated_at": "2026-07-20T09:00:32.393Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 3,
+  "fields": {
+    "name": "博美犬",
+    "category": 1,
+    "price": "4000.00",
+    "image_url": "/static/images/博美犬.png",
+    "description": "博美犬是一种小型玩赏犬，以其蓬松的毛发和狐狸般的面容深受喜爱。它们性格活泼好奇，警惕性高，是非常出色的看门犬。博美体型迷你可爱，但性格却很勇敢，有时候会不自量力地挑战大型犬。",
+    "color": "白色、橙色、棕色、黑色",
+    "weight": "2-4kg",
+    "height": "18-22cm",
+    "lifespan": "12-16年",
+    "temperament": "活泼、好奇、警惕、忠诚",
+    "origin": "德国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.417Z",
+    "updated_at": "2026-07-20T09:00:32.366Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 4,
+  "fields": {
+    "name": "柴犬",
+    "category": 2,
+    "price": "6000.00",
+    "image_url": "/static/images/柴犬.png",
+    "description": "柴犬是日本最具代表性的犬种之一，以其标志性的微笑表情风靡全球。它们性格独立、警觉，对主人忠诚但又有些固执。柴犬外形酷似小型秋田犬，拥有厚厚的双层被毛，非常耐寒。",
+    "color": "赤色、黑色、胡麻色、白色",
+    "weight": "8-11kg",
+    "height": "35-41cm",
+    "lifespan": "12-16年",
+    "temperament": "独立、忠诚、警觉、固执",
+    "origin": "日本",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.420Z",
+    "updated_at": "2026-07-20T09:00:32.390Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 5,
+  "fields": {
+    "name": "边境牧羊犬",
+    "category": 2,
+    "price": "8000.00",
+    "image_url": "/static/images/边境牧羊犬.png",
+    "description": "边境牧羊犬被公认为世界上最聪明的犬种。它们拥有极强的学习能力和工作欲望，是出色的牧羊犬和竞技犬。边牧精力极其充沛，需要大量的运动和智力刺激，适合活跃的家庭。",
+    "color": "黑白、蓝白、红白",
+    "weight": "14-20kg",
+    "height": "46-53cm",
+    "lifespan": "12-15年",
+    "temperament": "聪明、精力充沛、服从、灵敏",
+    "origin": "英国（苏格兰边境）",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.422Z",
+    "updated_at": "2026-07-20T09:00:32.415Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 6,
+  "fields": {
+    "name": "哈士奇",
+    "category": 2,
+    "price": "7000.00",
+    "image_url": "/static/images/哈士奇.png",
+    "description": "哈士奇，又称西伯利亚雪橇犬，以其狼一般的外表和二哈般的性格形成强烈反差而闻名。它们性格友好温和，几乎不具攻击性，但精力极其旺盛，拆家能力一流。哈士奇喜欢嚎叫，不适合公寓饲养。",
+    "color": "黑白、灰白、红白",
+    "weight": "16-27kg",
+    "height": "51-60cm",
+    "lifespan": "12-14年",
+    "temperament": "友善、活泼、调皮、固执",
+    "origin": "俄罗斯（西伯利亚）",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.424Z",
+    "updated_at": "2026-07-20T09:00:32.372Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 7,
+  "fields": {
+    "name": "金毛寻回犬",
+    "category": 3,
+    "price": "10000.00",
+    "image_url": "/static/images/金毛寻回犬.png",
+    "description": "金毛寻回犬是世界上最受欢迎的家庭犬之一，以其温柔友善的性格和金色的美丽被毛著称。它们对主人和小孩极其耐心，是非常优秀的导盲犬和搜救犬。金毛智商高，易于训练，但需要定期梳理被毛。",
+    "color": "金色、浅金色",
+    "weight": "25-34kg",
+    "height": "51-61cm",
+    "lifespan": "10-12年",
+    "temperament": "温柔、友善、聪明、可靠",
+    "origin": "英国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.427Z",
+    "updated_at": "2026-07-20T09:00:32.418Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 8,
+  "fields": {
+    "name": "德国牧羊犬",
+    "category": 3,
+    "price": "9000.00",
+    "image_url": "/static/images/德国牧羊犬.png",
+    "description": "德国牧羊犬是世界上最全能的工作犬之一，广泛应用于警犬、军犬和搜救犬领域。它们拥有极高的智商和服从性，对主人绝对忠诚。德牧体型优美、力量充沛，需要有经验的饲养者进行社会化训练。",
+    "color": "黑背黄、纯黑、纯白",
+    "weight": "30-40kg",
+    "height": "55-65cm",
+    "lifespan": "9-13年",
+    "temperament": "忠诚、勇敢、自信、警觉",
+    "origin": "德国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.429Z",
+    "updated_at": "2026-07-20T09:00:32.378Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 9,
+  "fields": {
+    "name": "拉布拉多寻回犬",
+    "category": 3,
+    "price": "8500.00",
+    "image_url": "/static/images/拉布拉多寻回犬.png",
+    "description": "拉布拉多寻回犬是全球最受欢迎的犬种之一，连续多年位居美国AKC注册量第一。它们性格温和友善，对孩子极其耐心，是理想的家庭伴侣犬。拉布拉多精力充沛，热爱游泳和衔取游戏。",
+    "color": "黑色、黄色、巧克力色",
+    "weight": "25-36kg",
+    "height": "54-62cm",
+    "lifespan": "10-14年",
+    "temperament": "温和、友善、活泼、忠诚",
+    "origin": "加拿大（纽芬兰）",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.432Z",
+    "updated_at": "2026-07-20T09:00:32.380Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 10,
+  "fields": {
+    "name": "阿拉斯加雪橇犬",
+    "category": 3,
+    "price": "9500.00",
+    "image_url": "/static/images/阿拉斯加雪橇犬.png",
+    "description": "阿拉斯加雪橇犬是最古老的极地雪橇犬之一，体型比哈士奇更大更壮实。它们拥有惊人的力量和耐力，性格稳重成熟。阿拉斯加对家庭非常忠诚，但因为体格庞大且精力充沛，需要有足够的饲养空间。",
+    "color": "灰白、黑白、红白",
+    "weight": "34-43kg",
+    "height": "58-66cm",
+    "lifespan": "10-12年",
+    "temperament": "稳重、忠诚、友善、坚强",
+    "origin": "美国（阿拉斯加）",
+    "is_popular": false,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.434Z",
+    "updated_at": "2026-07-20T09:00:32.420Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 11,
+  "fields": {
+    "name": "萨摩耶",
+    "category": 3,
+    "price": "12000.00",
+    "image_url": "/static/images/萨摩耶.png",
+    "description": "萨摩耶以其雪白的被毛和标志性的微笑表情被称为微笑天使。它们性格极其友善温和，对人类毫无攻击性。萨摩耶是优秀的家庭犬，特别适合有孩子的家庭。不过它们需要较多的梳理工作来保持毛发美观。",
+    "color": "纯白色、白色带浅黄色",
+    "weight": "20-30kg",
+    "height": "48-60cm",
+    "lifespan": "12-14年",
+    "temperament": "友善、温和、活泼、调皮",
+    "origin": "俄罗斯（西伯利亚）",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.436Z",
+    "updated_at": "2026-07-20T09:00:32.410Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 12,
+  "fields": {
+    "name": "秋田犬",
+    "category": 3,
+    "price": "15000.00",
+    "image_url": "/static/images/秋田犬.png",
+    "description": "秋田犬是日本国犬，以其忠诚勇猛的形象深入人心。著名的忠犬八公就是秋田犬。它们性格稳重独立，对主人极其忠诚，对陌生人保持警惕。秋田犬体型健硕，需要有经验的饲养者进行恰当的社会化训练。",
+    "color": "赤色、白色、虎斑色",
+    "weight": "30-45kg",
+    "height": "58-70cm",
+    "lifespan": "10-12年",
+    "temperament": "忠诚、勇敢、稳重、独立",
+    "origin": "日本（秋田县）",
+    "is_popular": false,
+    "is_published": true,
+    "created_at": "2026-07-05T06:40:18.439Z",
+    "updated_at": "2026-07-20T09:00:32.395Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 13,
+  "fields": {
+    "name": "西高地白梗",
+    "category": 1,
+    "price": "6500.00",
+    "image_url": "/static/images/西高地白梗.png",
+    "description": "西高地白梗（West Highland White Terrier）原产于苏格兰，以其纯白色的被毛和活泼的性格闻名。它们体型小巧但性格勇敢，曾经是出色的猎犬。西高地聪明自信，对主人忠诚友善，非常适合家庭饲养。它们需要定期梳理毛发以保持白色的光泽。",
+    "color": "纯白色",
+    "weight": "6-9kg",
+    "height": "25-30cm",
+    "lifespan": "12-16年",
+    "temperament": "活泼、自信、勇敢、友善",
+    "origin": "英国（苏格兰）",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T07:01:13.720Z",
+    "updated_at": "2026-07-20T09:00:32.413Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 14,
+  "fields": {
+    "name": "雪纳瑞",
+    "category": 1,
+    "price": "5500.00",
+    "image_url": "/static/images/雪纳瑞.png",
+    "description": "雪纳瑞（Schnauzer）原产于德国，以其标志性的胡子和眉毛造型深受喜爱。它们性格活泼机警，智商很高，易于训练。雪纳瑞分为迷你型、标准型和巨型三种，迷你和标准型最适合家庭饲养。它们掉毛极少，是过敏性体质人群的理想选择。",
+    "color": "椒盐色、纯黑色、黑白相间",
+    "weight": "7-14kg（标准型）",
+    "height": "30-50cm",
+    "lifespan": "12-15年",
+    "temperament": "活泼、机警、聪明、忠诚",
+    "origin": "德国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-05T07:01:13.725Z",
+    "updated_at": "2026-07-20T09:00:32.424Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 15,
+  "fields": {
+    "name": "英国短毛猫",
+    "category": 4,
+    "price": "3000.00",
+    "image_url": "/static/images/英国短毛猫.png",
+    "description": "英国短毛猫优点是脾气超好",
+    "color": "银灰色、蓝色",
+    "weight": "4-7kg",
+    "height": "30-35cm",
+    "lifespan": "13-17年",
+    "temperament": "温顺、安静、亲人",
+    "origin": "英国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-20T08:31:50.039Z",
+    "updated_at": "2026-07-20T09:00:32.406Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 16,
+  "fields": {
+    "name": "布偶猫",
+    "category": 6,
+    "price": "8000.00",
+    "image_url": "/static/images/布偶猫.png",
+    "description": "布偶猫猫中仙女，适合有小孩的家庭",
+    "color": "重点色、双色",
+    "weight": "4-9kg",
+    "height": "40-50cm",
+    "lifespan": "12-15年",
+    "temperament": "温柔、粘人、安静",
+    "origin": "美国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-20T08:31:50.043Z",
+    "updated_at": "2026-07-20T09:00:32.375Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 17,
+  "fields": {
+    "name": "暹罗猫",
+    "category": 5,
+    "price": "3500.00",
+    "image_url": "/static/images/暹罗猫.png",
+    "description": "暹罗猫非常粘人，不能长时间独处",
+    "color": "奶油色重点色",
+    "weight": "3-6kg",
+    "height": "35-40cm",
+    "lifespan": "12-15年",
+    "temperament": "聪明、活泼、话多",
+    "origin": "泰国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-20T08:31:50.043Z",
+    "updated_at": "2026-07-20T09:00:32.383Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 18,
+  "fields": {
+    "name": "缅因猫",
+    "category": 6,
+    "price": "10000.00",
+    "image_url": "/static/images/缅因猫.png",
+    "description": "缅因猫体型最大的家猫品种",
+    "color": "棕色虎斑、黑色",
+    "weight": "6-11kg",
+    "height": "50-65cm",
+    "lifespan": "12-15年",
+    "temperament": "温柔、聪明、忠诚",
+    "origin": "美国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-20T08:31:50.049Z",
+    "updated_at": "2026-07-20T09:00:32.398Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 19,
+  "fields": {
+    "name": "苏格兰折耳猫",
+    "category": 4,
+    "price": "5000.00",
+    "image_url": "/static/images/苏格兰折耳猫.png",
+    "description": "苏格兰折耳猫标志性折耳，注意骨骼健康",
+    "color": "各种颜色",
+    "weight": "3-6kg",
+    "height": "25-30cm",
+    "lifespan": "11-14年",
+    "temperament": "温柔、安静、亲人",
+    "origin": "英国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-20T08:31:50.049Z",
+    "updated_at": "2026-07-20T09:00:32.403Z"
+  }
+},
+{
+  "model": "pets.dog",
+  "pk": 20,
+  "fields": {
+    "name": "美国短毛猫",
+    "category": 5,
+    "price": "4000.00",
+    "image_url": "/static/images/美国短毛猫.png",
+    "description": "美国短毛猫体质好，容易照顾",
+    "color": "银色虎斑、棕色虎斑",
+    "weight": "4-7kg",
+    "height": "30-35cm",
+    "lifespan": "12-16年",
+    "temperament": "活泼、健康、友善",
+    "origin": "美国",
+    "is_popular": true,
+    "is_published": true,
+    "created_at": "2026-07-20T08:31:50.055Z",
+    "updated_at": "2026-07-20T09:00:32.401Z"
+  }
+},
+{
+  "model": "pets.post",
+  "pk": 1,
+  "fields": {
+    "author": 3,
+    "title": "啦啦啦德玛西亚",
+    "content": "好可爱",
+    "category": "share",
+    "image_url": "",
+    "created_at": "2026-07-20T12:04:16.327Z",
+    "updated_at": "2026-07-20T12:04:16.327Z"
+  }
+},
+{
+  "model": "pets.post",
+  "pk": 2,
+  "fields": {
+    "author": 3,
+    "title": "豆豆好可爱",
+    "content": "我养的小狗叫豆豆",
+    "category": "share",
+    "image_url": "",
+    "created_at": "2026-07-29T06:39:18.583Z",
+    "updated_at": "2026-07-29T06:39:18.583Z"
+  }
+},
+{
+  "model": "pets.post",
+  "pk": 3,
+  "fields": {
+    "author": 3,
+    "title": "狗狗吃了巧克力怎么办",
+    "content": "求解，急急急",
+    "category": "help",
+    "image_url": "",
+    "created_at": "2026-07-29T06:39:39.024Z",
+    "updated_at": "2026-07-29T06:39:39.024Z"
+  }
+},
+{
+  "model": "pets.comment",
+  "pk": 1,
+  "fields": {
+    "post": 1,
+    "author": 3,
+    "content": "啦啦啦啦撸啊撸啊",
+    "created_at": "2026-07-20T12:04:36.841Z"
+  }
+},
+{
+  "model": "pets.productcategory",
+  "pk": 1,
+  "fields": {
+    "name": "疫苗",
+    "slug": "vaccine",
+    "icon": "💉",
+    "sort_order": 1
+  }
+},
+{
+  "model": "pets.productcategory",
+  "pk": 2,
+  "fields": {
+    "name": "宠物食品",
+    "slug": "food",
+    "icon": "🍖",
+    "sort_order": 2
+  }
+},
+{
+  "model": "pets.productcategory",
+  "pk": 3,
+  "fields": {
+    "name": "宠物玩具",
+    "slug": "toy",
+    "icon": "🧸",
+    "sort_order": 3
+  }
+},
+{
+  "model": "pets.productcategory",
+  "pk": 4,
+  "fields": {
+    "name": "宠物配件",
+    "slug": "accessory",
+    "icon": "🎀",
+    "sort_order": 4
+  }
+},
+{
+  "model": "pets.productcategory",
+  "pk": 5,
+  "fields": {
+    "name": "保健品",
+    "slug": "health",
+    "icon": "💊",
+    "sort_order": 5
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 1,
+  "fields": {
+    "name": "狂犬疫苗(单针)",
+    "category": 1,
+    "price": "80.00",
+    "image_url": "/static/images/狂犬疫苗.png",
+    "description": "宠物医院专用狂犬疫苗，安全有效",
+    "stock": 99,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.344Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 2,
+  "fields": {
+    "name": "犬四联疫苗(卫佳伍)",
+    "category": 1,
+    "price": "120.00",
+    "image_url": "/static/images/疫苗.png",
+    "description": "预防犬瘟热、细小病毒等四种传染病",
+    "stock": 50,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.348Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 3,
+  "fields": {
+    "name": "猫三联疫苗(妙三多)",
+    "category": 1,
+    "price": "150.00",
+    "image_url": "/static/images/疫苗.png",
+    "description": "预防猫瘟、猫鼻支、猫杯状病毒",
+    "stock": 50,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.352Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 4,
+  "fields": {
+    "name": "皇家狗粮15kg",
+    "category": 2,
+    "price": "320.00",
+    "image_url": "/static/images/狗粮.png",
+    "description": "成犬用，营养均衡，适口性好",
+    "stock": 30,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.355Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 5,
+  "fields": {
+    "name": "渴望猫粮5kg",
+    "category": 2,
+    "price": "280.00",
+    "image_url": "/static/images/猫粮.png",
+    "description": "六种鱼配方，富含Omega-3",
+    "stock": 25,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.359Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 6,
+  "fields": {
+    "name": "宠物零食鸡肉干",
+    "category": 2,
+    "price": "35.00",
+    "image_url": "/static/images/零食.png",
+    "description": "天然风干鸡胸肉，无添加",
+    "stock": 100,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.363Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 7,
+  "fields": {
+    "name": "发声玩具球",
+    "category": 3,
+    "price": "25.00",
+    "image_url": "/static/images/玩具球.png",
+    "description": "狗狗猫咪都爱玩的发声球",
+    "stock": 200,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.366Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 8,
+  "fields": {
+    "name": "逗猫棒(羽毛款)",
+    "category": 3,
+    "price": "18.00",
+    "image_url": "/static/images/逗猫棒.png",
+    "description": "猫咪最爱的互动玩具",
+    "stock": 150,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.369Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 9,
+  "fields": {
+    "name": "漏食球益智玩具",
+    "category": 3,
+    "price": "45.00",
+    "image_url": "/static/images/益智玩具.png",
+    "description": "藏食设计，让宠物边玩边吃",
+    "stock": 80,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.372Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 10,
+  "fields": {
+    "name": "项圈牵引绳套装",
+    "category": 4,
+    "price": "55.00",
+    "image_url": "/static/images/牵引绳.png",
+    "description": "舒适透气，防挣脱设计",
+    "stock": 60,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.376Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 11,
+  "fields": {
+    "name": "宠物猫狗通用睡垫",
+    "category": 4,
+    "price": "89.00",
+    "image_url": "/static/images/睡垫.png",
+    "description": "加厚柔软，四季通用",
+    "stock": 40,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.380Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 12,
+  "fields": {
+    "name": "宠物外出水壶",
+    "category": 4,
+    "price": "38.00",
+    "image_url": "/static/images/水壶.png",
+    "description": "一键出水，便携设计",
+    "stock": 70,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.383Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 13,
+  "fields": {
+    "name": "宠物指甲剪套装",
+    "category": 4,
+    "price": "29.00",
+    "image_url": "/static/images/指甲剪.png",
+    "description": "防误剪设计，含磨甲刀",
+    "stock": 90,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.387Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 14,
+  "fields": {
+    "name": "益生菌(调理肠胃)",
+    "category": 5,
+    "price": "68.00",
+    "image_url": "/static/images/益生菌.png",
+    "description": "改善宠物肠胃健康，调理软便",
+    "stock": 45,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.390Z"
+  }
+},
+{
+  "model": "pets.product",
+  "pk": 15,
+  "fields": {
+    "name": "鱼油软胶囊(护毛)",
+    "category": 5,
+    "price": "88.00",
+    "image_url": "/static/images/鱼油.png",
+    "description": "富含Omega-3，美毛护肤",
+    "stock": 35,
+    "is_published": true,
+    "created_at": "2026-07-20T11:12:34.393Z"
+  }
+},
+{
+  "model": "pets.cart",
+  "pk": 1,
+  "fields": {
+    "user": 3,
+    "created_at": "2026-07-20T11:43:51.418Z"
+  }
+},
+{
+  "model": "pets.cartitem",
+  "pk": 4,
+  "fields": {
+    "cart": 1,
+    "product": 10,
+    "quantity": 3
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "auth",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "pets",
+    "model": "dog"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "pets",
+    "model": "petcategory"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "pets",
+    "model": "deworming"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "pets",
+    "model": "petprofile"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "pets",
+    "model": "reminder"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "pets",
+    "model": "vaccination"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "pets",
+    "model": "weightrecord"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "pets",
+    "model": "comment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "pets",
+    "model": "post"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "pets",
+    "model": "cart"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "pets",
+    "model": "cartitem"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 18,
+  "fields": {
+    "app_label": "pets",
+    "model": "order"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 19,
+  "fields": {
+    "app_label": "pets",
+    "model": "orderitem"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 20,
+  "fields": {
+    "app_label": "pets",
+    "model": "product"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 21,
+  "fields": {
+    "app_label": "pets",
+    "model": "productcategory"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "2xynxt22f8nlwa6ehpya1xwv1vsby7n5",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGllO1o5tSnrOYL31OiSAHCmfCnF3iJQC2jcz76UStnVI21LmNIo6K1Kn342RH6XuQO6ot0nnqa7zyHpX9EEXfZ2kPC-H-3cwYBm-dQt0LkpG5CazBAbFAMnWdARv2ULYWOo8BXhHtg2mb0tvg3eG0PTq_QH-jjf0:1wlilk:7MLzxIAjhWOLagpJze8AhMj34XQccWgBGu9cQNytfQg",
+    "expire_date": "2026-08-03T07:50:32.396Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "k9njjnslfpdw8qlpl9rrjvzn5geh5qr8",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSFAy2NcuvcbyAwDUjU0Ke3K-O_apAvd3nPOfYmI21rj1vMSJxZnYcTpdyNMj9x2wHdst1mmua3LRHJX5EG7vM6cn5fD_Tuo2Ou3HsZAumjDBSyAAs5ptDkgO4UOPIViKRiHXiswCbwrShF4UANry8WL9wfX3Tdj:1wgJ0T:MUnCMmmVOmmy-KxebFGoC7K58DW6mlmiw_CEvhGqZ80",
+    "expire_date": "2026-07-19T09:19:21.669Z"
+  }
+}
+]
