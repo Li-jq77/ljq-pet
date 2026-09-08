@@ -18,10 +18,14 @@
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;">
         {% for p in products %}
         <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px var(--shadow);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 25px var(--shadow-lg)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px var(--shadow)'">
-            <div style="height:180px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:4rem;">{{ p.category.icon }}</div>
+            <a href="{% url 'pets:product_detail' p.pk %}" style="display:block;text-decoration:none;color:inherit;">
+                <div style="height:180px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:4rem;">{{ p.category.icon }}</div>
+            </a>
             <div style="padding:1rem 1.2rem 1.2rem;">
-                <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.2rem;">{{ p.category.name }}</div>
-                <div style="font-size:1rem;font-weight:600;margin-bottom:0.3rem;">{{ p.name }}</div>
+                <a href="{% url 'pets:product_detail' p.pk %}" style="display:block;text-decoration:none;color:inherit;">
+                    <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.2rem;">{{ p.category.name }}</div>
+                    <div style="font-size:1rem;font-weight:600;margin-bottom:0.3rem;">{{ p.name }}</div>
+                </a>
                 <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.7rem;line-height:1.5;">{{ p.description|truncatewords:15 }}</div>
                 <div style="display:flex;align-items:center;justify-content:space-between;">
                     <span style="font-size:1.2rem;font-weight:700;color:var(--coral);">¥{{ p.price }}</span>

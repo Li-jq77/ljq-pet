@@ -14,6 +14,7 @@
                 <h1>{{ dog.name }}</h1>
                 <div class="subtitle">{{ dog.category.icon }} {{ dog.category.name }}</div>
                 <div class="detail-price">¥{{ dog.price }} <small>起</small></div>
+                <a href="{% url 'pets:add_dog_to_cart' dog.pk %}" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.6rem 1.3rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.9rem;box-shadow:0 4px 12px var(--shadow);margin-bottom:1rem;">🛒 加入购物车</a>
 
                 <div class="detail-meta">
                     {% if dog.origin %}

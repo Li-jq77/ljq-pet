@@ -26,7 +26,7 @@
         <h3 style="font-size:1rem;color:var(--brown);margin-bottom:0.8rem;">商品清单</h3>
         {% for item in order.items.all %}
         <div style="display:flex;justify-content:space-between;padding:0.5rem 0;font-size:0.9rem;border-bottom:1px solid #f5f5f5;">
-            <span>{{ item.product.name }} × {{ item.quantity }}</span>
+            <span>{% if item.dog %}{{ item.dog.name }}{% else %}{{ item.product.name }}{% endif %} × {{ item.quantity }}</span>
             <span style="font-weight:600;">¥{{ item.price }} × {{ item.quantity }}</span>
         </div>
         {% endfor %}

@@ -34,9 +34,11 @@ urlpatterns = [
     path("posts/<int:pk>/", views.post_detail_view, name="post_detail"),
     # 产品 & 购物车 & 订单
     path("products/", views.product_list_view, name="product_list"),
+    path("products/<int:pk>/", views.product_detail_view, name="product_detail"),
     path("products/<slug:slug>/", views.product_list_view, name="product_category"),
     path("cart/", views.cart_view, name="cart"),
     path("cart/add/<int:product_pk>/", views.add_to_cart, name="add_to_cart"),
+    path("cart/add-dog/<int:dog_pk>/", views.add_dog_to_cart, name="add_dog_to_cart"),
     path("cart/remove/<int:item_pk>/", views.remove_from_cart, name="remove_from_cart"),
     path("cart/quantity/<int:item_pk>/<str:action>/", views.cart_quantity, name="cart_qty"),
     path("checkout/", views.checkout_view, name="checkout"),

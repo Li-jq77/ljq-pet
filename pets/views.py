@@ -9,7 +9,9 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from datetime import date, timedelta, datetime
 import json
+import random
 from django.db.models import Q
+from django.db.models import Case, Value, When
 
 from .models import (PetCategory, Dog, PetProfile, WeightRecord,
                      Vaccination, Deworming, Reminder,
@@ -37,18 +39,55 @@ def get_profile_context(request):
         ),
     }
 
+
+def get_fixed_shuffled_dogs():
+    """返回固定乱序一次的已上架宠物列表。"""
+    ids = list(
+        Dog.objects.filter(is_published=True)
+        .order_by("pk")
+        .values_list("pk", flat=True)
+    )
+    if not ids:
+        return Dog.objects.filter(is_published=True)
+    random.Random(20260909).shuffle(ids)
+    cases = [When(pk=dog_id, then=Value(position)) for position, dog_id in enumerate(ids)]
+    return (
+        Dog.objects.filter(pk__in=ids)
+        .order_by(Case(*cases))
+    )
+
 class IndexView(ListView):
     model = Dog
     template_name = "pets/index.html"
     context_object_name = "dogs"
     def get_queryset(self):
-        return Dog.objects.filter(is_published=True)[:12]
+        return get_fixed_shuffled_dogs()
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = get_all_categories()
         context["dog_categories"] = get_dog_categories()
         context["cat_categories"] = get_cat_categories()
-        context["popular_dogs"] = Dog.objects.filter(is_published=True, is_popular=True)[:6]
+        dog_slugs = ("small", "medium", "large")
+        dog_popular = list(
+            Dog.objects.filter(
+                is_published=True,
+                is_popular=True,
+                category__slug__in=dog_slugs,
+            ).order_by("pk")
+        )
+        cat_popular = list(
+            Dog.objects.filter(
+                is_published=True,
+                is_popular=True,
+            )
+            .exclude(category__slug__in=dog_slugs)
+            .order_by("pk")
+        )
+        random.Random(20260910).shuffle(dog_popular)
+        random.Random(20260911).shuffle(cat_popular)
+        popular_dogs = dog_popular[:4] + cat_popular[:4]
+        random.Random(20260912).shuffle(popular_dogs)
+        context["popular_dogs"] = popular_dogs
         return context
 
 class CategoryView(ListView):
@@ -407,7 +446,27 @@ def product_list_view(request, slug=None):
     context.update({"product_categories": categories, "current_category": current_cat, "products": products})
     return render(request, "pets/product_list.html", context)
 
+
+def product_detail_view(request, pk):
+    product = get_object_or_404(Product, pk=pk, is_published=True)
+    categories = ProductCategory.objects.all()
+    related = Product.objects.filter(
+        category=product.category,
+        is_published=True,
+    ).exclude(pk=product.pk)[:3]
+    context = get_profile_context(request)
+    context.update({
+        "product_categories": categories,
+        "product": product,
+        "related_products": related,
+    })
+    return render(request, "pets/product_detail.html", context)
+
 # ---- Cart ----
+
+def cart_item_price(item):
+    return item.dog.price if item.dog else item.product.price
+
 
 @login_required
 def add_to_cart(request, product_pk):
@@ -420,6 +479,19 @@ def add_to_cart(request, product_pk):
     messages.success(request, f"✅ {product.name} 已加入购物车")
     return redirect("pets:cart")
 
+
+@login_required
+def add_dog_to_cart(request, dog_pk):
+    dog = get_object_or_404(Dog, pk=dog_pk, is_published=True)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    item, created = CartItem.objects.get_or_create(cart=cart, dog=dog)
+    if not created:
+        messages.info(request, f"{dog.name} 已经在购物车里啦 🛒")
+        return redirect("pets:cart")
+    messages.success(request, f"✅ {dog.name} 已加入购物车")
+    return redirect("pets:cart")
+
+
 @login_required
 def remove_from_cart(request, item_pk):
     item = get_object_or_404(CartItem, pk=item_pk, cart__user=request.user)
@@ -429,6 +501,10 @@ def remove_from_cart(request, item_pk):
 @login_required
 def cart_quantity(request, item_pk, action):
     item = get_object_or_404(CartItem, pk=item_pk, cart__user=request.user)
+    if item.dog:
+        if action == "dec":
+            item.delete()
+        return redirect("pets:cart")
     if action == "inc":
         item.quantity += 1
         item.save()
@@ -444,7 +520,7 @@ def cart_quantity(request, item_pk, action):
 def cart_view(request):
     cart = Cart.objects.filter(user=request.user).first()
     items = cart.items.all() if cart else []
-    total = sum(item.product.price * item.quantity for item in items) if items else 0
+    total = sum(cart_item_price(item) * item.quantity for item in items) if items else 0
     context = get_profile_context(request)
     context.update({"cart": cart, "cart_items": items, "total": total})
     return render(request, "pets/cart.html", context)
@@ -458,7 +534,7 @@ def checkout_view(request):
         messages.warning(request, "购物车是空的哦 🛒")
         return redirect("pets:cart")
     items = cart.items.all()
-    total = sum(item.product.price * item.quantity for item in items)
+    total = sum(cart_item_price(item) * item.quantity for item in items)
     if request.method == "POST":
         phone = request.POST.get("phone", "")
         address = request.POST.get("address", "")
@@ -467,7 +543,13 @@ def checkout_view(request):
         else:
             order = Order.objects.create(user=request.user, phone=phone, address=address, total=total)
             for item in items:
-                OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity, price=item.product.price)
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.product,
+                    dog=item.dog,
+                    quantity=item.quantity,
+                    price=cart_item_price(item),
+                )
             cart.items.all().delete()
             messages.success(request, "🎉 订单已创建！请尽快完成支付")
             return redirect("pets:order_detail", pk=order.pk)

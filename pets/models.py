@@ -330,14 +330,37 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, verbose_name="购物车", related_name="items")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="产品")
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name="产品",
+        null=True,
+        blank=True,
+    )
+    dog = models.ForeignKey(
+        Dog,
+        on_delete=models.CASCADE,
+        verbose_name="狗狗",
+        null=True,
+        blank=True,
+        related_name="cart_items",
+    )
     quantity = models.IntegerField("数量", default=1)
 
     class Meta:
         verbose_name = "购物车项"
         verbose_name_plural = "购物车项"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["cart", "dog"],
+                condition=models.Q(dog__isnull=False),
+                name="unique_cart_dog",
+            ),
+        ]
 
     def __str__(self):
+        if self.dog:
+            return f"{self.dog.name} x {self.quantity}"
         return f"{self.product.name} x {self.quantity}"
 
 
@@ -367,7 +390,20 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name="订单", related_name="items")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="产品")
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name="产品",
+        null=True,
+        blank=True,
+    )
+    dog = models.ForeignKey(
+        Dog,
+        on_delete=models.CASCADE,
+        verbose_name="狗狗",
+        null=True,
+        blank=True,
+    )
     quantity = models.IntegerField("数量")
     price = models.DecimalField("单价", max_digits=10, decimal_places=2)
 
@@ -376,4 +412,6 @@ class OrderItem(models.Model):
         verbose_name_plural = "订单项"
 
     def __str__(self):
+        if self.dog:
+            return f"{self.dog.name} x {self.quantity}"
         return f"{self.product.name} x {self.quantity}"

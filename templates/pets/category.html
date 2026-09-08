@@ -17,22 +17,7 @@
     {% if dogs %}
     <div class="dog-grid">
         {% for dog in dogs %}
-        <a href="{% url 'pets:dog_detail' dog.pk %}" class="dog-card" style="text-decoration:none;color:inherit;">
-            <div class="dog-img-wrapper">
-                {% if dog.is_popular %}<span class="popular-badge">🔥 热门</span>{% endif %}
-                <img class="dog-img" src="{{ dog.image_url|default:'https://placedog.net/400/300' }}" alt="{{ dog.name }}" loading="lazy">
-            </div>
-            <div class="dog-info">
-                <div class="dog-name">{{ dog.name }}</div>
-                <div class="dog-category">{{ dog.category.icon }} {{ dog.category.name }}</div>
-                <div class="dog-tags">
-                    {% if dog.origin %}<span class="tag">🌍 {{ dog.origin }}</span>{% endif %}
-                    {% if dog.weight %}<span class="tag">⚖️ {{ dog.weight }}</span>{% endif %}
-                    {% if dog.lifespan %}<span class="tag">⏳ {{ dog.lifespan }}</span>{% endif %}
-                </div>
-                <div class="dog-price">¥{{ dog.price }} <small>起</small></div>
-            </div>
-        </a>
+        {% include 'pets/includes/dog_card.html' %}
         {% endfor %}
     </div>
 

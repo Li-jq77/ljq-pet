@@ -20,23 +20,23 @@
 
 .dodou-fab {
     position: fixed;
-    right: 22px;
-    bottom: 22px;
+    right: 16px;
+    bottom: 16px;
     z-index: 2147483000;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    height: 58px;
-    padding: 0 18px 0 10px;
+    gap: 8px;
+    height: 56px;
+    padding: 0 16px 0 6px;
     border: none;
-    border-radius: 34px;
+    border-radius: 32px;
     background: linear-gradient(135deg, #ff8da1, #b98af1);
     color: #fff;
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0;
-    box-shadow: 0 8px 24px rgba(185, 94, 137, 0.32);
+    box-shadow: 0 6px 18px rgba(185, 94, 137, 0.3);
     cursor: grab;
     touch-action: none;
     user-select: none;
@@ -55,6 +55,10 @@
     box-shadow: 0 14px 34px rgba(70, 52, 92, 0.32);
 }
 
+.dodou-panel.is-dragging {
+    cursor: grabbing;
+}
+
 .dodou-fab-avatar {
     display: inline-flex;
     align-items: center;
@@ -71,12 +75,13 @@
 
 .dodou-fab-label {
     white-space: nowrap;
+    font-size: 0.9rem;
 }
 
 .dodou-panel {
     position: fixed;
     right: 20px;
-    bottom: 92px;
+    bottom: 84px;
     z-index: 2147483001;
     display: flex;
     flex-direction: column;
@@ -143,10 +148,25 @@
     box-shadow: 0 3px 10px rgba(185, 94, 137, 0.24);
 }
 
+.dodou-avatar-img {
+    display: block;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(185, 94, 137, 0.24);
+}
+
 .dodou-avatar-lg {
     width: 42px;
     height: 42px;
     font-size: 1.3rem;
+}
+
+.dodou-avatar-img-lg {
+    width: 42px;
+    height: 42px;
 }
 
 .dodou-head-copy {
@@ -449,25 +469,25 @@
 
 @media (max-width: 640px) {
     .dodou-fab {
-        right: 14px;
-        bottom: 14px;
-        height: 54px;
-        padding: 0 14px 0 8px;
+        right: 12px;
+        bottom: 12px;
+        height: 52px;
+        padding: 0 14px 0 5px;
     }
 
-    .dodou-fab-avatar {
-        width: 36px;
-        height: 36px;
+    .dodou-fab-avatar-img {
+        width: 30px;
+        height: 30px;
     }
 
     .dodou-fab-label {
-        font-size: 0.86rem;
+        font-size: 0.84rem;
     }
 
     .dodou-panel {
         left: 12px;
         right: 12px;
-        bottom: 78px;
+        bottom: 76px;
         width: auto;
         height: min(600px, calc(100dvh - 94px));
     }
@@ -481,14 +501,21 @@
     }
 }
 
-@media (max-width: 400px) {
-    .dodou-fab-label {
-        display: none;
-    }
+.dodou-fab-avatar-img {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.32);
+}
 
+@media (max-width: 400px) {
     .dodou-fab {
-        padding: 0;
-        width: 54px;
-        justify-content: center;
+        width: auto;
     }
 }

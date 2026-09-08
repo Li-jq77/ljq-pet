@@ -4,6 +4,7 @@
 
     var panel = document.getElementById("dodouPanel");
     var fab = document.getElementById("dodouFab");
+    var fabAvatar = fab.querySelector("img");
     var messagesEl = document.getElementById("dodouMessages");
     var form = document.getElementById("dodouForm");
     var input = document.getElementById("dodouInput");
@@ -11,6 +12,7 @@
     var closeBtn = document.getElementById("dodouClose");
     var tokenInput = form.querySelector('input[name="csrfmiddlewaretoken"]');
     var chatUrl = root.getAttribute("data-chat-url");
+    var avatarUrl = root.getAttribute("data-avatar-url");
 
     var positionKey = "dodouFabPosition";
     var panelPositionKey = "dodouPanelPosition";
@@ -32,11 +34,60 @@
         originLeft: 0,
         originTop: 0
     };
+    var scrollKey = "petScroll:" + location.pathname + location.search;
 
     root.classList.add("is-ready");
 
+    function saveScrollPosition() {
+        try {
+            sessionStorage.setItem(
+                scrollKey,
+                String(window.scrollY || document.documentElement.scrollTop || 0)
+            );
+        } catch (e) {}
+    }
+
+    function restoreScrollPosition() {
+        var raw = null;
+        try {
+            raw = sessionStorage.getItem(scrollKey);
+        } catch (e) {}
+        if (!raw) return;
+        var top = parseInt(raw, 10);
+        if (!isFinite(top) || top <= 0) return;
+        requestAnimationFrame(function () {
+            window.scrollTo(0, top);
+        });
+    }
+
+    document.addEventListener("click", function (event) {
+        var link = event.target.closest("a[href]");
+        if (!link) return;
+        var href = link.getAttribute("href") || "";
+        var isExternal = /^(https?:)?\/\//i.test(href) ||
+            href.indexOf("#") === 0 ||
+            href.indexOf("javascript:") === 0 ||
+            href.indexOf("mailto:") === 0 ||
+            href.indexOf("tel:") === 0 ||
+            (link.target && link.target !== "_self");
+        if (!isExternal) saveScrollPosition();
+    });
+
+    window.addEventListener("pageshow", function (event) {
+        if (!event.persisted) restoreScrollPosition();
+    });
+
     function clamp(value, min, max) {
         return Math.min(Math.max(value, min), max);
+    }
+
+    function isFabAvatarPointer(event) {
+        if (!fabAvatar) return false;
+        var rect = fabAvatar.getBoundingClientRect();
+        return event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom;
     }
 
     function loadFabPosition() {
@@ -70,6 +121,44 @@
             }));
         } catch (e) {}
     }
+
+    fab.addEventListener("pointerdown", function (event) {
+        if (event.button !== 0 && event.pointerType === "mouse") return;
+        dragging = true;
+        moved = false;
+        startX = event.clientX;
+        startY = event.clientY;
+        var rect = fab.getBoundingClientRect();
+        originLeft = rect.left;
+        originTop = rect.top;
+        fab.setPointerCapture && fab.setPointerCapture(event.pointerId);
+        fab.classList.add("is-dragging");
+    });
+
+    fab.addEventListener("pointermove", function (event) {
+        if (!dragging) return;
+        var dx = event.clientX - startX;
+        var dy = event.clientY - startY;
+        if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
+        if (moved) {
+            applyFabPosition(originLeft + dx, originTop + dy);
+            document.body.style.userSelect = "none";
+            document.body.style.webkitUserSelect = "none";
+        }
+    });
+
+    function endFabDrag(event) {
+        if (!dragging) return;
+        dragging = false;
+        fab.classList.remove("is-dragging");
+        fab.releasePointerCapture && event.pointerId && fab.releasePointerCapture(event.pointerId);
+        document.body.style.userSelect = "";
+        document.body.style.webkitUserSelect = "";
+        if (moved) saveFabPosition();
+    }
+
+    fab.addEventListener("pointerup", endFabDrag);
+    fab.addEventListener("pointercancel", endFabDrag);
 
     function applyPanelPosition(left, top, fromStorage) {
         var rect = panel.getBoundingClientRect();
@@ -135,10 +224,10 @@
         content.className = "dodou-content";
 
         if (sender === "bot") {
-            var avatar = document.createElement("span");
-            avatar.className = "dodou-avatar";
+            var avatar = document.createElement("img");
+            avatar.className = "dodou-avatar-img";
             avatar.setAttribute("aria-hidden", "true");
-            avatar.textContent = "豆";
+            avatar.src = avatarUrl;
             row.appendChild(avatar);
 
             var bubble = document.createElement("div");
@@ -161,7 +250,7 @@
     function addTyping() {
         var row = document.createElement("div");
         row.className = "dodou-row dodou-row-bot dodou-typing-row";
-        row.innerHTML = '<span class="dodou-avatar" aria-hidden="true">豆</span>' +
+        row.innerHTML = '<img class="dodou-avatar-img" src="' + avatarUrl + '" alt="" aria-hidden="true">' +
             '<div class="dodou-content"><div class="dodou-bubble dodou-typing">' +
             '<span></span><span></span><span></span></div></div>';
         messagesEl.appendChild(row);
@@ -323,48 +412,7 @@
         }
     });
 
-    fab.addEventListener("pointerdown", function (event) {
-        if (event.button !== 0 && event.pointerType === "mouse") return;
-        dragging = true;
-        moved = false;
-        startX = event.clientX;
-        startY = event.clientY;
-        var rect = fab.getBoundingClientRect();
-        originLeft = rect.left;
-        originTop = rect.top;
-        fab.setPointerCapture && fab.setPointerCapture(event.pointerId);
-        fab.classList.add("is-dragging");
-    });
-
-    fab.addEventListener("pointermove", function (event) {
-        if (!dragging) return;
-        var dx = event.clientX - startX;
-        var dy = event.clientY - startY;
-        if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
-        if (moved) {
-            applyFabPosition(originLeft + dx, originTop + dy);
-            document.body.style.userSelect = "none";
-            document.body.style.webkitUserSelect = "none";
-        }
-    });
-
-    function endDrag(event) {
-        if (!dragging) return;
-        dragging = false;
-        fab.classList.remove("is-dragging");
-        fab.releasePointerCapture && event.pointerId && fab.releasePointerCapture(event.pointerId);
-        document.body.style.userSelect = "";
-        document.body.style.webkitUserSelect = "";
-        if (moved) {
-            saveFabPosition();
-            if (isPanelOpen()) togglePanel(false);
-        }
-    }
-
-    fab.addEventListener("pointerup", endDrag);
-    fab.addEventListener("pointercancel", endDrag);
-
-    panelHead.addEventListener("pointerdown", function (event) {
+    panel.addEventListener("pointerdown", function (event) {
         if (event.button !== 0 && event.pointerType === "mouse") return;
         var interactive = event.target.closest("button, a, input, textarea");
         if (interactive) return;
@@ -375,12 +423,11 @@
         var rect = panel.getBoundingClientRect();
         panelDrag.originLeft = rect.left;
         panelDrag.originTop = rect.top;
-        panelHead.setPointerCapture && panelHead.setPointerCapture(event.pointerId);
-        panelHead.classList.add("is-dragging");
+        panel.setPointerCapture && panel.setPointerCapture(event.pointerId);
         panel.classList.add("is-dragging");
     });
 
-    panelHead.addEventListener("pointermove", function (event) {
+    panel.addEventListener("pointermove", function (event) {
         if (!panelDrag.active) return;
         var dx = event.clientX - panelDrag.startX;
         var dy = event.clientY - panelDrag.startY;
@@ -398,25 +445,22 @@
     function endPanelDrag(event) {
         if (!panelDrag.active) return;
         panelDrag.active = false;
-        panelHead.classList.remove("is-dragging");
         panel.classList.remove("is-dragging");
-        panelHead.releasePointerCapture &&
+        panel.releasePointerCapture &&
             event.pointerId &&
-            panelHead.releasePointerCapture(event.pointerId);
+            panel.releasePointerCapture(event.pointerId);
         document.body.style.userSelect = "";
         document.body.style.webkitUserSelect = "";
         if (panelDrag.moved) savePanelPosition();
     }
 
-    panelHead.addEventListener("pointerup", endPanelDrag);
-    panelHead.addEventListener("pointercancel", endPanelDrag);
+    panel.addEventListener("pointerup", endPanelDrag);
+    panel.addEventListener("pointercancel", endPanelDrag);
 
     fab.addEventListener("click", function (event) {
-        if (moved) {
-            event.stopPropagation();
-            return;
-        }
-        togglePanel();
+        if (moved || isFabAvatarPointer(event)) return;
+        if (isPanelOpen()) return;
+        togglePanel(true);
     });
 
     minimizeBtn.addEventListener("click", function () {

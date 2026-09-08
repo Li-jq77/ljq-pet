@@ -261,6 +261,48 @@ body {
 
 .dog-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px var(--shadow-lg); }
 
+.dog-card-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+}
+
+.dog-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    padding: 0.55rem 0.8rem 0.7rem;
+    border-top: 1px solid #fff0f3;
+    margin-top: auto;
+}
+
+.dog-card-actions .dog-price {
+    margin-top: 0;
+}
+
+.dog-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.68rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(255, 107, 138, 0.24);
+    transition: transform 0.2s ease;
+}
+
+.dog-add-btn:hover {
+    transform: translateY(-1px);
+}
+
 .dog-card .dog-img-wrapper {
     overflow: hidden;
     position: relative;
@@ -411,7 +453,7 @@ body {
 .address-map img { width: 100%; border-radius: 12px; box-shadow: 0 4px 20px var(--shadow); }
 
 /* ====== Page Layout ====== */
-.page-container { max-width: 1200px; margin: 0 auto; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
+.page-container { width: 100%; max-width: 1200px; margin: 0 auto; box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
 .address-wrapper { max-width: 1200px; margin: 0 auto; }
 
 /* ====== Media Queries ====== */

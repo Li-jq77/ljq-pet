@@ -1,24 +1,26 @@
+{% load static %}
 <div id="dodouWidget" class="dodou-widget"
      data-chat-url="{% url 'pets:dodou_chat' %}"
-     data-weather-url="{% url 'pets:dodou_weather' %}">
-    <section class="dodou-panel" id="dodouPanel" aria-hidden="true" aria-label="豆豆智能体">
+     data-weather-url="{% url 'pets:dodou_weather' %}"
+     data-avatar-url="{% static 'images/dodou_dog.jpg' %}">
+    <section class="dodou-panel" id="dodouPanel" aria-hidden="true" aria-label="智能体豆豆">
         <header class="dodou-panel-head">
             <div class="dodou-head-user">
-                <span class="dodou-avatar dodou-avatar-lg" aria-hidden="true">豆</span>
+                <img class="dodou-avatar-img dodou-avatar-img-lg" src="{% static 'images/dodou_dog.jpg' %}" alt="" aria-hidden="true">
                 <div class="dodou-head-copy">
-                    <strong>豆豆智能体</strong>
+                    <strong>智能体豆豆</strong>
                     <span>宠物问诊 · 遛狗天气</span>
                 </div>
             </div>
             <div class="dodou-head-actions">
-                <button class="dodou-icon-btn" id="dodouMinimize" type="button" aria-label="收起豆豆">－</button>
-                <button class="dodou-icon-btn" id="dodouClose" type="button" aria-label="关闭豆豆">×</button>
+                <button class="dodou-icon-btn" id="dodouMinimize" type="button" aria-label="收起智能体豆豆">－</button>
+                <button class="dodou-icon-btn" id="dodouClose" type="button" aria-label="关闭智能体豆豆">×</button>
             </div>
         </header>
 
         <div class="dodou-messages" id="dodouMessages" role="log" aria-live="polite">
             <div class="dodou-row dodou-row-bot">
-                <span class="dodou-avatar" aria-hidden="true">豆</span>
+                <img class="dodou-avatar-img" src="{% static 'images/dodou_dog.jpg' %}" alt="" aria-hidden="true">
                 <div class="dodou-bubble dodou-welcome">
                     <p>你好呀，豆豆在这里。宠物哪里不舒服，或者出门前想看看天气，都可以直接告诉豆豆。</p>
                     <div class="dodou-welcome-actions">
@@ -52,7 +54,7 @@
     </section>
 
     <button class="dodou-fab" id="dodouFab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="dodouPanel">
-        <span class="dodou-fab-avatar" aria-hidden="true">豆</span>
-        <span class="dodou-fab-label">豆豆智能体</span>
+        <img class="dodou-fab-avatar-img" src="{% static 'images/dodou_dog.jpg' %}" alt="" aria-hidden="true" draggable="false">
+        <span class="dodou-fab-label">智能体豆豆</span>
     </button>
 </div>
