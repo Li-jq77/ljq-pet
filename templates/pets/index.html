@@ -14,6 +14,12 @@
     --text-dark: #333;
 }
 
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 /* ====== Hero Banner 顶部横幅 ====== */
 .hero-banner {
     height: 380px;
@@ -61,7 +67,7 @@ section {
 /* ====== 品种分类卡片 ====== */
 .category-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.2rem;
 }
 .category-card {
@@ -93,10 +99,14 @@ section {
     margin: 0;
 }
 @media (max-width: 1024px) {
-    .category-grid { grid-template-columns: repeat(2, 1fr); }
+    .category-grid { grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
 }
 @media (max-width: 480px) {
-    .category-grid { grid-template-columns: 1fr; }
+    .category-grid { grid-template-columns: repeat(3, 1fr); gap: 0.45rem; }
+    .category-card { padding: 0.8rem 0.25rem; }
+    .cat-icon { font-size: 1.6rem; margin-bottom: 0.35rem; }
+    .category-card h3 { font-size: 0.95rem; }
+    .category-card p { font-size: 0.68rem; }
 }
 
 /* ====== 宠物卡片网格 ====== */
@@ -207,10 +217,13 @@ section {
 
 /* ====== 店铺地址区块 ====== */
 .address-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    display: flex;
     align-items: center;
+    gap: 2rem;
+}
+.address-info {
+    flex: 1;
+    min-width: 0;
 }
 .address-line {
     margin: 0;
@@ -228,13 +241,29 @@ section {
     font-weight: 500;
     font-size: 1rem;
 }
+.address-map {
+    flex: 0 0 400px;
+    width: min(100%, 400px);
+    margin-left: auto;
+}
 .address-map img {
-    width: 100%;
-    border-radius: 16px;
     display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 16px;
 }
 @media (max-width: 768px) {
-    .address-container { grid-template-columns: 1fr; }
+    .address-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .address-map {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
 }
 </style>
 {% endblock %}
@@ -253,14 +282,21 @@ section {
     <section class="categories-section">
         <h2 class="section-title">品种分类</h2>
         <div class="category-grid">
-            {% for cat in categories %}
+            {% for cat in dog_categories reversed %}
                 <a href="{% url 'pets:category' cat.slug %}" class="category-card">
                     <span class="cat-icon">{{ cat.icon }}</span>
                     <h3>{{ cat.name }}</h3>
-                    <p>{{ cat.description|default:'点击查看该分类下的狗狗' }}</p>
+                    <p>{{ cat.description|default:'点击查看该分类' }}</p>
                 </a>
-            {% empty %}
-                <p class="grid-empty-tip">暂无分类数据 🐾</p>
+            {% endfor %}
+        </div>
+        <div class="category-grid">
+            {% for cat in cat_categories reversed %}
+                <a href="{% url 'pets:category' cat.slug %}" class="category-card">
+                    <span class="cat-icon">{{ cat.icon }}</span>
+                    <h3>{{ cat.name }}</h3>
+                    <p>{{ cat.description|default:'点击查看该分类' }}</p>
+                </a>
             {% endfor %}
         </div>
     </section>

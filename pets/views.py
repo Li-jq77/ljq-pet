@@ -30,7 +30,11 @@ def get_profile_context(request):
         "categories": get_all_categories(),
         "dog_categories": get_dog_categories(),
         "cat_categories": get_cat_categories(),
-        "pets_count": request.user.pets.filter(is_active=True).count(),
+        "pets_count": (
+            request.user.pets.filter(is_active=True).count()
+            if request.user.is_authenticated
+            else 0
+        ),
     }
 
 class IndexView(ListView):
@@ -391,7 +395,6 @@ def post_detail_view(request, pk):
 
 # ---- Products ----
 
-@login_required
 def product_list_view(request, slug=None):
     categories = ProductCategory.objects.all()
     if slug:

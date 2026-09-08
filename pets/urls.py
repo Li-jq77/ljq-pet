@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import dodou_views
 
 app_name = "pets"
 
@@ -43,5 +44,7 @@ urlpatterns = [
     path("orders/<int:pk>/", views.order_detail_view, name="order_detail"),
     path("orders/<int:pk>/cancel/", views.cancel_order_view, name="cancel_order"),
     path("orders/<int:pk>/pay/", views.pay_order_view, name="pay_order"),
+    # 豆豆智能体
+    path("dodou/chat/", dodou_views.dodou_chat_view, name="dodou_chat"),
+    path("dodou/weather/", dodou_views.dodou_weather_view, name="dodou_weather"),
 ]
-
