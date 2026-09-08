@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 import pymysql
 pymysql.install_as_MySQLdb()
 """
@@ -21,7 +24,7 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get(
-        "DJANGO_ALLOWED_HOSTS", "8.217.93.123,localhost,127.0.0.1"
+        "DJANGO_ALLOWED_HOSTS", "*"
     ).split(",")
     if host.strip()
 ]
