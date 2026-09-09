@@ -7,6 +7,15 @@ This is a Django project and should run behind Gunicorn and Nginx:
 MySQL environment variables are named `DB_NAME`, `DB_USER`, `DB_PASSWORD`,
 `DB_HOST`, and `DB_PORT`; see `.env.example`.
 
+After the MySQL database, user, and `.env` are ready, the remaining server
+steps can be run with one script:
+
+```bash
+bash deploy/setup_server.sh
+```
+
+The detailed manual steps below match what the script does.
+
 ## 1. Install system packages
 
 ```bash
