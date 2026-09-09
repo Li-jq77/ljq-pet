@@ -41,8 +41,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # whitenoise 生产子路径部署注释，静态交给Nginx处理
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -111,41 +110,39 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# 未登录访问受保护页面时，统一跳转到站点自己的登录页。
+LOGIN_URL = os.environ.get("DJANGO_LOGIN_URL", "/login/")
+LOGIN_REDIRECT_URL = os.environ.get("DJANGO_LOGIN_REDIRECT", "/")
+
 # Internationalization
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_TZ = True
 
-# ===================== 子路径部署核心配置 /pet‑agent/ =====================
-
-# 静态资源 CSS JS
-STATIC_URL = '/pet-agent/static/'
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = os.environ.get("DJANGO_STATIC_URL", '/static/')
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# 用户上传媒体（商品图片）
-MEDIA_URL = '/pet-agent/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-# 存储后端：生产交给Nginx，关闭whitenoise压缩
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+MEDIA_URL = os.environ.get("DJANGO_MEDIA_URL", '/media/')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CSRF信任域名，.env中可以继续追加域名IP
+# Add your public IP or domain to .env when the project is deployed.
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
         "DJANGO_CSRF_TRUSTED_ORIGINS",
-        "http://127.0.0.1:8000,http://localhost:8000"
+        "http://127.0.0.1:8000,http://localhost:8000,http://8.217.93.123",
     ).split(",")
     if origin.strip()
 ]
