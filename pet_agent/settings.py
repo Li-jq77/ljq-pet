@@ -12,9 +12,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 from pathlib import Path
-import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 # Security settings come from environment variables so the same project works
 # locally and on the Alibaba Cloud Ubuntu server.
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-dev-only")
@@ -26,19 +27,22 @@ ALLOWED_HOSTS = [
     ).split(",")
     if host.strip()
 ]
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'pets',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pets',
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # whitenoise 生产子路径部署注释，静态交给Nginx处理
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -46,7 +50,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 ROOT_URLCONF = 'pet_agent.urls'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -54,6 +60,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -61,30 +68,33 @@ TEMPLATES = [
         },
     },
 ]
+
 WSGI_APPLICATION = 'pet_agent.wsgi.application'
+
 # Database
 if os.environ.get("DB_NAME"):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get('DB_NAME'),
-            'USER': os.environ.get('DB_USER'),
-            'PASSWORD': os.environ.get('DB_PASSWORD'),
-            'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-            'PORT': os.environ.get('DB_PORT', '3306'),
+            'NAME': os.environ.get("DB_NAME"),
+            'USER': os.environ.get("DB_USER"),
+            'PASSWORD': os.environ.get("DB_PASSWORD"),
+            'HOST': os.environ.get("DB_HOST", "127.0.0.1"),
+            'PORT': os.environ.get("DB_PORT", "3306"),
             'OPTIONS': {
-                'charset': 'utf8mb4',
-            },
+                'charset': 'utf8mb4'
+            }
         }
     }
 else:
-    # 未配置 MySQL 时自动使用本地 SQLite，方便直接运行项目预览。
+    # 本地开发回退sqlite
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -100,35 +110,43 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-# 未登录访问受保护页面时，统一跳转到站点自己的登录页。
-LOGIN_URL = os.environ.get("DJANGO_LOGIN_URL", "/login/")
-LOGIN_REDIRECT_URL = os.environ.get("DJANGO_LOGIN_REDIRECT", "/")
+
 # Internationalization
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_TZ = True
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = os.environ.get("DJANGO_STATIC_URL", '/static/')
+
+# ===================== 子路径部署核心配置 /pet‑agent/ =====================
+FORCE_SCRIPT_NAME = '/pet-agent/'
+
+# 静态资源 CSS JS
+STATIC_URL = '/pet-agent/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# 用户上传媒体（商品图片）
+MEDIA_URL = '/pet-agent/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# 存储后端：生产交给Nginx，关闭whitenoise压缩
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-MEDIA_URL = os.environ.get("DJANGO_MEDIA_URL", '/media/')
-MEDIA_ROOT = BASE_DIR / 'media'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# Add your public IP or domain to .env when the project is deployed.
+
+# CSRF信任域名，.env中可以继续追加域名IP
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
         "DJANGO_CSRF_TRUSTED_ORIGINS",
-        "http://127.0.0.1:8000,http://localhost:8000,http://8.217.93.123",
+        "http://127.0.0.1:8000,http://localhost:8000"
     ).split(",")
     if origin.strip()
 ]
