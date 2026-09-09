@@ -118,7 +118,6 @@ USE_I18N = True
 USE_TZ = True
 
 # ===================== 子路径部署核心配置 /pet‑agent/ =====================
-FORCE_SCRIPT_NAME = '/pet-agent/'
 
 # 静态资源 CSS JS
 STATIC_URL = '/pet-agent/static/'
