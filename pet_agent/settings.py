@@ -13,10 +13,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 from pathlib import Path
 import os
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 # Security settings come from environment variables so the same project works
 # locally and on the Alibaba Cloud Ubuntu server.
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-dev-only")
@@ -28,7 +26,6 @@ ALLOWED_HOSTS = [
     ).split(",")
     if host.strip()
 ]
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -50,9 +46,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 ROOT_URLCONF = 'pet_agent.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -67,9 +61,7 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'pet_agent.wsgi.application'
-
 # Database
 if os.environ.get("DB_NAME"):
     DATABASES = {
@@ -93,7 +85,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -109,22 +100,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 # 未登录访问受保护页面时，统一跳转到站点自己的登录页。
-LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/"
-
+LOGIN_URL = os.environ.get("DJANGO_LOGIN_URL", "/login/")
+LOGIN_REDIRECT_URL = os.environ.get("DJANGO_LOGIN_REDIRECT", "/")
 # Internationalization
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_TZ = True
-
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
+STATIC_URL = os.environ.get("DJANGO_STATIC_URL", '/static/')
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -133,12 +120,9 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
-MEDIA_URL = '/media/'
+MEDIA_URL = os.environ.get("DJANGO_MEDIA_URL", '/media/')
 MEDIA_ROOT = BASE_DIR / 'media'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 # Add your public IP or domain to .env when the project is deployed.
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
