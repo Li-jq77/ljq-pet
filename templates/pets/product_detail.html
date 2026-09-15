@@ -8,8 +8,12 @@
 
     <div class="detail-card">
         <div class="detail-header">
-            <div style="width:260px;height:260px;border-radius:16px;background:linear-gradient(145deg,var(--cream),#fff);display:flex;align-items:center;justify-content:center;font-size:6rem;flex-shrink:0;">
+            <div style="width:260px;height:260px;border-radius:16px;background:linear-gradient(145deg,var(--cream),#fff);display:flex;align-items:center;justify-content:center;font-size:6rem;flex-shrink:0;overflow:hidden;">
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" style="width:100%;height:100%;object-fit:cover;">
+                {% else %}
                 {{ product.category.icon }}
+                {% endif %}
             </div>
             <div class="detail-title">
                 <div class="subtitle" style="margin-bottom:0.4rem;">{{ product.category.icon }} {{ product.category.name }}</div>
@@ -42,7 +46,13 @@
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;">
         {% for related in related_products %}
         <a href="{% url 'pets:product_detail' related.pk %}" style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px var(--shadow);text-decoration:none;color:inherit;transition:all 0.25s;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 6px 20px var(--shadow-lg)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px var(--shadow)'">
-            <div style="height:130px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:3.5rem;">{{ related.category.icon }}</div>
+            <div style="height:130px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:3.5rem;overflow:hidden;">
+                {% if related.image_url %}
+                <img src="{{ related.image_url }}" alt="{{ related.name }}" style="width:100%;height:100%;object-fit:cover;">
+                {% else %}
+                {{ related.category.icon }}
+                {% endif %}
+            </div>
             <div style="padding:0.9rem 1rem 1rem;">
                 <div style="font-size:0.75rem;color:var(--text-light);">{{ related.category.name }}</div>
                 <div style="font-weight:600;margin:0.15rem 0;">{{ related.name }}</div>

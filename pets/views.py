@@ -465,7 +465,7 @@ def product_detail_view(request, pk):
 # ---- Cart ----
 
 def cart_item_price(item):
-    return item.dog.price if item.dog else item.product.price
+    return item.unit_price
 
 
 @login_required
@@ -486,7 +486,9 @@ def add_dog_to_cart(request, dog_pk):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     item, created = CartItem.objects.get_or_create(cart=cart, dog=dog)
     if not created:
-        messages.info(request, f"{dog.name} 已经在购物车里啦 🛒")
+        item.quantity += 1
+        item.save(update_fields=["quantity"])
+        messages.success(request, f"✅ {dog.name} 的数量 +1")
         return redirect("pets:cart")
     messages.success(request, f"✅ {dog.name} 已加入购物车")
     return redirect("pets:cart")
@@ -501,17 +503,13 @@ def remove_from_cart(request, item_pk):
 @login_required
 def cart_quantity(request, item_pk, action):
     item = get_object_or_404(CartItem, pk=item_pk, cart__user=request.user)
-    if item.dog:
-        if action == "dec":
-            item.delete()
-        return redirect("pets:cart")
     if action == "inc":
         item.quantity += 1
-        item.save()
+        item.save(update_fields=["quantity"])
     elif action == "dec":
         if item.quantity > 1:
             item.quantity -= 1
-            item.save()
+            item.save(update_fields=["quantity"])
         else:
             item.delete()
     return redirect("pets:cart")

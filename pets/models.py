@@ -361,7 +361,49 @@ class CartItem(models.Model):
     def __str__(self):
         if self.dog:
             return f"{self.dog.name} x {self.quantity}"
-        return f"{self.product.name} x {self.quantity}"
+        if self.product:
+            return f"{self.product.name} x {self.quantity}"
+        return f"购物车项 #{self.pk}"
+
+    @property
+    def display_name(self):
+        if self.dog:
+            return self.dog.name
+        if self.product:
+            return self.product.name
+        return "未知商品"
+
+    @property
+    def unit_price(self):
+        if self.dog:
+            return self.dog.price
+        if self.product:
+            return self.product.price
+        return 0
+
+    @property
+    def line_total(self):
+        return self.unit_price * self.quantity
+
+    @property
+    def image_url(self):
+        if self.dog:
+            return self.dog.image_url
+        if self.product:
+            return self.product.image_url
+        return ""
+
+    @property
+    def category_icon(self):
+        if self.dog:
+            return self.dog.category.icon
+        if self.product:
+            return self.product.category.icon
+        return "🐾"
+
+    @property
+    def item_type(self):
+        return "宠物" if self.dog else "商品"
 
 
 class Order(models.Model):

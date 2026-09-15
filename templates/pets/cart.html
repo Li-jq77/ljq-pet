@@ -1,57 +1,358 @@
 {% extends 'pets/base.html' %}
-{% load static %}
 {% block title %}🛒 购物车 - 里脊球的宠物店{% endblock %}
+
+{% block extra_css %}
+<style>
+.cart-shell {
+    width: min(1320px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+}
+
+.cart-shell-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.cart-shell-head h1 {
+    margin: 0;
+    color: var(--brown);
+    font-size: 1.55rem;
+}
+
+.cart-shell-head p {
+    margin: 0.25rem 0 0;
+    color: var(--text-light);
+    font-size: 0.88rem;
+}
+
+.cart-shell-continue,
+.cart-shell-checkout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.58rem 1.15rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+.cart-shell-continue {
+    background: white;
+    color: var(--text);
+    border: 1.5px solid #eee;
+}
+
+.cart-shell-checkout {
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: white;
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.cart-shell-list {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.cart-shell-row {
+    display: grid;
+    grid-template-columns: 120px minmax(220px, 1fr) 130px 130px;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1rem 1.2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px var(--shadow);
+}
+
+.cart-shell-thumb {
+    width: 120px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--cream);
+    font-size: 2.8rem;
+}
+
+.cart-shell-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.cart-shell-info {
+    min-width: 0;
+}
+
+.cart-shell-info h2 {
+    margin: 0 0 0.3rem;
+    color: var(--brown);
+    font-size: 1.05rem;
+}
+
+.cart-shell-info p {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 0.84rem;
+}
+
+.cart-shell-type {
+    display: inline-block;
+    margin-bottom: 0.35rem;
+    padding: 0.14rem 0.5rem;
+    border-radius: 50px;
+    background: var(--pink-light);
+    color: var(--pink);
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.cart-shell-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.cart-shell-qty-btn {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.cart-shell-qty-dec {
+    color: var(--text);
+    background: var(--cream);
+}
+
+.cart-shell-qty-inc {
+    color: var(--pink);
+    background: var(--pink-light);
+}
+
+.cart-shell-qty-value {
+    min-width: 30px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.cart-shell-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+}
+
+.cart-shell-line-total {
+    color: var(--coral);
+    font-size: 1.16rem;
+    font-weight: 700;
+}
+
+.cart-shell-remove {
+    color: var(--text-light);
+    font-size: 0.76rem;
+    text-decoration: none;
+}
+
+.cart-shell-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.3rem 1.5rem;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px var(--shadow);
+}
+
+.cart-shell-total {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    color: var(--text-light);
+}
+
+.cart-shell-total strong {
+    color: var(--coral);
+    font-size: 1.9rem;
+}
+
+.cart-shell-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.cart-shell-empty {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 2px 12px var(--shadow);
+}
+
+.cart-shell-empty span {
+    display: block;
+    margin-bottom: 0.7rem;
+    font-size: 4rem;
+}
+
+.cart-shell-empty h2 {
+    margin: 0 0 0.4rem;
+    color: var(--brown);
+}
+
+.cart-shell-empty p {
+    margin: 0 0 1.2rem;
+    color: var(--text-light);
+}
+
+@media (max-width: 900px) {
+    .cart-shell {
+        width: calc(100% - 2rem);
+        padding: 1.4rem 0 3rem;
+    }
+
+    .cart-shell-row {
+        grid-template-columns: 96px minmax(0, 1fr);
+        align-items: start;
+        gap: 0.8rem 1rem;
+    }
+
+    .cart-shell-thumb {
+        width: 96px;
+        height: 84px;
+    }
+
+    .cart-shell-quantity {
+        grid-column: 2;
+        justify-content: flex-start;
+    }
+
+    .cart-shell-side {
+        grid-column: 2;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 560px) {
+    .cart-shell {
+        width: calc(100% - 1.2rem);
+        padding-top: 1rem;
+    }
+
+    .cart-shell-head,
+    .cart-shell-summary {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .cart-shell-row {
+        grid-template-columns: 78px minmax(0, 1fr);
+        padding: 0.8rem;
+    }
+
+    .cart-shell-thumb {
+        width: 78px;
+        height: 72px;
+        font-size: 2rem;
+    }
+
+    .cart-shell-actions {
+        justify-content: space-between;
+    }
+
+    .cart-shell-checkout {
+        flex: 1;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div style="padding:2rem;max-width:1100px;margin:0 auto;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem;">
+<main class="cart-shell">
+    <header class="cart-shell-head">
         <div>
-            <h1 style="font-size:1.5rem;color:var(--brown);margin:0;">🛒 购物车</h1>
-            <p style="color:var(--text-light);margin:0.2rem 0 0;">看看你都给毛孩子挑了些什么吧 🐾</p>
+            <h1>🛒 购物车</h1>
+            <p>看看你都给毛孩子挑了些什么吧 🐾</p>
         </div>
-        <a href="{% url 'pets:product_list' %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.5rem 1.2rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.85rem;">🛍️ 继续选购</a>
-    </div>
+        <a href="{% url 'pets:product_list' %}" class="cart-shell-continue">🛍️ 继续选购</a>
+    </header>
+
     {% if cart_items %}
-    <div style="display:flex;flex-direction:column;gap:1rem;">
+    <section class="cart-shell-list">
         {% for item in cart_items %}
-        <div style="display:flex;align-items:center;gap:1.2rem;background:white;border-radius:16px;padding:1rem 1.5rem;box-shadow:0 2px 12px var(--shadow);">
-            <span style="font-size:3rem;width:70px;text-align:center;">
-                {% if item.dog %}{{ item.dog.category.icon }}{% else %}{{ item.product.category.icon }}{% endif %}
-            </span>
-            <div style="flex:1;min-width:0;">
-                <strong style="font-size:1.1rem;display:block;">{% if item.dog %}{{ item.dog.name }}{% else %}{{ item.product.name }}{% endif %}</strong>
-                <span style="font-size:0.85rem;color:var(--text-light);">💰 ¥{% if item.dog %}{{ item.dog.price }}{% else %}{{ item.product.price }}{% endif %} / {% if item.dog %}只{% else %}件{% endif %}</span>
+        <article class="cart-shell-row">
+            <div class="cart-shell-thumb">
+                {% if item.image_url %}
+                <img src="{{ item.image_url }}" alt="{{ item.display_name }}" loading="lazy">
+                {% else %}
+                <span>{{ item.category_icon }}</span>
+                {% endif %}
             </div>
-            {% if not item.dog %}
-            <div style="display:flex;align-items:center;gap:0.5rem;">
-                <a href="{% url 'pets:cart_qty' item.pk 'dec' %}" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--cream);border-radius:50%;text-decoration:none;color:var(--text);font-weight:700;font-size:1.2rem;transition:all 0.2s;" onmouseover="this.style.background='var(--pink-light)'" onmouseout="this.style.background='var(--cream)'">−</a>
-                <span style="min-width:40px;text-align:center;font-weight:600;font-size:1.1rem;">{{ item.quantity }}</span>
-                <a href="{% url 'pets:cart_qty' item.pk 'inc' %}" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--pink-light);border-radius:50%;text-decoration:none;color:var(--pink);font-weight:700;font-size:1.2rem;transition:all 0.2s;" onmouseover="this.style.background='var(--pink)'" onmouseout="this.style.background='var(--pink-light)'">+</a>
+
+            <div class="cart-shell-info">
+                <span class="cart-shell-type">{{ item.item_type }}</span>
+                <h2>{{ item.display_name }}</h2>
+                <p>单价 ¥{{ item.unit_price|floatformat:"2" }}</p>
             </div>
-            {% endif %}
-            <div style="text-align:right;min-width:100px;">
-                <div style="font-size:1.3rem;font-weight:700;color:var(--coral);">¥{% if item.dog %}{{ item.dog.price }}{% else %}{% widthratio item.product.price 1 item.quantity %}{% endif %}</div>
-                <a href="{% url 'pets:remove_from_cart' item.pk %}" style="font-size:0.78rem;color:var(--text-light);text-decoration:none;" onclick="return confirm('确定要移除此商品吗？')">🗑️ 移除</a>
+
+            <div class="cart-shell-quantity">
+                <a href="{% url 'pets:cart_qty' item.pk 'dec' %}"
+                   class="cart-shell-qty-btn cart-shell-qty-dec"
+                   aria-label="减少数量">−</a>
+                <span class="cart-shell-qty-value">×{{ item.quantity }}</span>
+                <a href="{% url 'pets:cart_qty' item.pk 'inc' %}"
+                   class="cart-shell-qty-btn cart-shell-qty-inc"
+                   aria-label="增加数量">+</a>
             </div>
-        </div>
+
+            <div class="cart-shell-side">
+                <span class="cart-shell-line-total">¥{{ item.line_total|floatformat:"2" }}</span>
+                <a href="{% url 'pets:remove_from_cart' item.pk %}"
+                   class="cart-shell-remove"
+                   onclick="return confirm('确定要移除此商品吗？')">🗑️ 移除</a>
+            </div>
+        </article>
         {% endfor %}
-    </div>
-    <div style="margin-top:2rem;background:white;border-radius:20px;padding:1.5rem 2rem;box-shadow:0 2px 12px var(--shadow);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-        <div>
-            <span style="color:var(--text-light);font-size:0.9rem;">合计</span>
-            <span style="font-weight:700;color:var(--coral);font-size:2rem;margin-left:0.5rem;">¥{{ total|floatformat:'2' }}</span>
+    </section>
+
+    <section class="cart-shell-summary">
+        <div class="cart-shell-total">
+            <span>合计</span>
+            <strong>¥{{ total|floatformat:"2" }}</strong>
         </div>
-        <div style="display:flex;gap:0.8rem;">
-            <a href="{% url 'pets:product_list' %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.5rem 1.2rem;background:white;color:var(--text);border:1.5px solid #eee;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.85rem;">继续选购</a>
-            <a href="{% url 'pets:checkout' %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.8rem 2rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:1.1rem;box-shadow:0 4px 12px var(--shadow);">💳 去结算</a>
+        <div class="cart-shell-actions">
+            <a href="{% url 'pets:product_list' %}" class="cart-shell-continue">继续选购</a>
+            <a href="{% url 'pets:checkout' %}" class="cart-shell-checkout">💳 去结算</a>
         </div>
-    </div>
+    </section>
     {% else %}
-    <div style="text-align:center;padding:4rem 2rem;background:white;border-radius:24px;box-shadow:0 2px 12px var(--shadow);">
-        <div style="font-size:5rem;margin-bottom:1rem;">🛒</div>
-        <h2 style="color:var(--brown);margin-bottom:0.5rem;">购物车是空的</h2>
-        <p style="color:var(--text-light);margin-bottom:1.5rem;">快给毛孩子选些爱心礼物吧 💕</p>
-        <a href="{% url 'pets:product_list' %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.8rem 2rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;font-size:1.1rem;box-shadow:0 4px 12px var(--shadow);">🛍️ 去商店逛逛</a>
-    </div>
+    <section class="cart-shell-empty">
+        <span>🛒</span>
+        <h2>购物车是空的</h2>
+        <p>快给毛孩子选些爱心礼物吧 💕</p>
+        <a href="{% url 'pets:product_list' %}" class="cart-shell-checkout">🛍️ 去商店逛逛</a>
+    </section>
     {% endif %}
-</div>
+</main>
 {% endblock %}

@@ -51,11 +51,16 @@
                         <a href="{% url 'pets:product_category' 'accessory' %}">🎀 配件</a>
                         <a href="{% url 'pets:product_category' 'health' %}">💊 保健品</a>
                         <hr style="margin:0.3rem 0;border:none;border-top:1px solid #eee;">
-                        <a href="{% url 'pets:cart' %}" style="font-weight:600;color:var(--pink);">🛒 购物车</a>
                         <a href="{% url 'pets:order_list' %}">📦 我的订单</a>
                     </div>
                 </li>
 
+                <li>
+                    <a href="{% url 'pets:cart' %}"
+                       {% if request.resolver_match.url_name == 'cart' %}class="active"{% endif %}>
+                        🛒 购物车
+                    </a>
+                </li>
                 <!-- 求助分享下拉 -->
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">📢 求助分享</a>

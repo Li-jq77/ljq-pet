@@ -1,51 +1,255 @@
-﻿{% extends 'pets/base.html' %}
-{% load static %}
+{% extends 'pets/base.html' %}
 {% block title %}{% if current_category %}{{ current_category.name }} - {% endif %}相关产品 - 里脊球的宠物店{% endblock %}
+
+{% block extra_css %}
+<style>
+.products-shell {
+    width: min(1400px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+}
+
+.products-shell h1 {
+    margin: 0 0 0.3rem;
+    color: var(--brown);
+    font-size: 1.55rem;
+}
+
+.products-shell-intro {
+    margin: 0 0 1.4rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.products-shell-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.products-shell-category {
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    background: white;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.84rem;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.products-shell-category.is-active {
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: white;
+}
+
+.products-shell-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.1rem;
+}
+
+.products-shell-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.products-shell-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 22px var(--shadow-lg);
+}
+
+.products-shell-visual {
+    height: 175px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+    font-size: 4rem;
+}
+
+.products-shell-visual img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.products-shell-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1rem 1.1rem 1.1rem;
+}
+
+.products-shell-category-name {
+    margin-bottom: 0.2rem;
+    color: var(--text-light);
+    font-size: 0.77rem;
+}
+
+.products-shell-name {
+    margin-bottom: 0.35rem;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.products-shell-description {
+    margin-bottom: 0.8rem;
+    color: var(--text-light);
+    font-size: 0.8rem;
+    line-height: 1.55;
+}
+
+.products-shell-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.products-shell-price {
+    color: var(--coral);
+    font-size: 1.14rem;
+    font-weight: 700;
+}
+
+.products-shell-add {
+    padding: 0.42rem 0.8rem;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: white;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.products-shell-stock {
+    margin-top: 0.45rem;
+    color: var(--coral);
+    font-size: 0.73rem;
+}
+
+.products-shell-empty {
+    grid-column: 1 / -1;
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-light);
+}
+
+.products-shell-empty span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 3rem;
+}
+
+.products-shell-cart-link {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.products-shell-cart-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.4rem;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--pink), var(--coral));
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+    .products-shell-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 820px) {
+    .products-shell {
+        width: calc(100% - 2rem);
+        padding: 1.4rem 0 3rem;
+    }
+
+    .products-shell-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .products-shell {
+        width: calc(100% - 1.2rem);
+        padding-top: 1rem;
+    }
+
+    .products-shell-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div style="padding:2rem;max-width:1100px;margin:0 auto;">
-    <h1 style="font-size:1.5rem;color:var(--brown);margin-bottom:0.3rem;">🛍️ 相关产品</h1>
-    <p style="color:var(--text-light);margin-bottom:1.5rem;">疫苗、配件、食品……给毛孩子最好的关爱 💕</p>
+<main class="products-shell">
+    <h1>🛍️ 相关产品</h1>
+    <p class="products-shell-intro">疫苗、配件、食品……给毛孩子最好的关爱 💕</p>
 
-    <!-- 分类导航 -->
-    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;">
-        <a href="{% url 'pets:product_list' %}" style="padding:0.4rem 1rem;border-radius:50px;font-size:0.85rem;text-decoration:none;{% if not current_category %}background:linear-gradient(135deg,var(--pink),var(--coral));color:white;{% else %}background:white;color:var(--text);box-shadow:0 2px 8px var(--shadow);{% endif %}">全部</a>
+    <nav class="products-shell-categories" aria-label="产品分类">
+        <a href="{% url 'pets:product_list' %}"
+           class="products-shell-category{% if not current_category %} is-active{% endif %}">全部</a>
         {% for pc in product_categories %}
-        <a href="{% url 'pets:product_category' pc.slug %}" style="padding:0.4rem 1rem;border-radius:50px;font-size:0.85rem;text-decoration:none;{% if current_category.slug == pc.slug %}background:linear-gradient(135deg,var(--pink),var(--coral));color:white;{% else %}background:white;color:var(--text);box-shadow:0 2px 8px var(--shadow);{% endif %}">{{ pc.icon }} {{ pc.name }}</a>
+        <a href="{% url 'pets:product_category' pc.slug %}"
+           class="products-shell-category{% if current_category.slug == pc.slug %} is-active{% endif %}">
+            {{ pc.icon }} {{ pc.name }}
+        </a>
         {% endfor %}
-    </div>
+    </nav>
 
-    <!-- 产品列表 -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;">
+    <section class="products-shell-grid">
         {% for p in products %}
-        <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px var(--shadow);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 25px var(--shadow-lg)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px var(--shadow)'">
-            <a href="{% url 'pets:product_detail' p.pk %}" style="display:block;text-decoration:none;color:inherit;">
-                <div style="height:180px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:4rem;">{{ p.category.icon }}</div>
+        <article class="products-shell-card">
+            <a href="{% url 'pets:product_detail' p.pk %}" class="products-shell-visual"
+               aria-label="查看 {{ p.name }}">
+                {% if p.image_url %}
+                <img src="{{ p.image_url }}" alt="{{ p.name }}" loading="lazy">
+                {% else %}
+                {{ p.category.icon }}
+                {% endif %}
             </a>
-            <div style="padding:1rem 1.2rem 1.2rem;">
-                <a href="{% url 'pets:product_detail' p.pk %}" style="display:block;text-decoration:none;color:inherit;">
-                    <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.2rem;">{{ p.category.name }}</div>
-                    <div style="font-size:1rem;font-weight:600;margin-bottom:0.3rem;">{{ p.name }}</div>
-                </a>
-                <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.7rem;line-height:1.5;">{{ p.description|truncatewords:15 }}</div>
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                    <span style="font-size:1.2rem;font-weight:700;color:var(--coral);">¥{{ p.price }}</span>
-                    <a href="{% url 'pets:add_to_cart' p.pk %}" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.4rem 1rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-size:0.8rem;font-weight:600;">🛒 加入购物车</a>
+            <div class="products-shell-body">
+                <div class="products-shell-category-name">{{ p.category.name }}</div>
+                <a href="{% url 'pets:product_detail' p.pk %}" class="products-shell-name">{{ p.name }}</a>
+                <div class="products-shell-description">{{ p.description|truncatewords:15 }}</div>
+                <div class="products-shell-footer">
+                    <span class="products-shell-price">¥{{ p.price }}</span>
+                    <a href="{% url 'pets:add_to_cart' p.pk %}" class="products-shell-add">🛒 加入购物车</a>
                 </div>
                 {% if p.stock < 10 %}
-                <div style="font-size:0.75rem;color:var(--coral);margin-top:0.3rem;">仅剩 {{ p.stock }} 件</div>
+                <div class="products-shell-stock">仅剩 {{ p.stock }} 件</div>
                 {% endif %}
             </div>
-        </div>
+        </article>
         {% empty %}
-        <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">
-            <span style="font-size:3rem;display:block;margin-bottom:0.5rem;">📦</span>
+        <div class="products-shell-empty">
+            <span>📦</span>
             <p>该分类暂无产品</p>
         </div>
         {% endfor %}
-    </div>
+    </section>
 
-    <div style="margin-top:2rem;text-align:center;">
-        <a href="{% url 'pets:cart' %}" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.5rem;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border-radius:50px;text-decoration:none;font-weight:600;">🛒 前往购物车</a>
+    <div class="products-shell-cart-link">
+        <a href="{% url 'pets:cart' %}">🛒 前往购物车</a>
     </div>
-</div>
+</main>
 {% endblock %}
