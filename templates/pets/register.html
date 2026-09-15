@@ -19,7 +19,7 @@
         </div>
         {% endif %}
 
-        <form method="post">
+        <form method="post" id="register-form">
             {% csrf_token %}
             <div class="form-group">
                 <label for="id_username">用户名</label>
@@ -41,4 +41,45 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    var form = document.getElementById("register-form");
+    var passwordInput = document.getElementById("id_password1");
+
+    if (!form || !passwordInput) return;
+
+    var commonPasswords = [
+        "123456", "12345678", "123456789", "password", "qwerty",
+        "abc123", "111111", "000000", "admin", "iloveyou"
+    ];
+
+    form.addEventListener("submit", function (event) {
+        var password = passwordInput.value;
+        var normalized = password.toLowerCase();
+        var tooShort = password.length < 6;
+        var onlyNumbers = /^\d+$/.test(password);
+        var onlyLetters = /^[a-z]+$/i.test(password);
+        var common = commonPasswords.indexOf(normalized) !== -1;
+
+        if (!tooShort && !onlyNumbers && !onlyLetters && !common) return;
+
+        var reason = tooShort
+            ? "密码少于 6 位"
+            : common
+                ? "这是常见密码"
+                : onlyNumbers
+                    ? "密码全是数字"
+                    : "密码全是字母";
+        var message = "密码太简单了（" + reason + "），确定还要继续注册吗？";
+
+        if (!window.confirm(message)) {
+            event.preventDefault();
+            passwordInput.focus();
+        }
+    });
+})();
+</script>
 {% endblock %}

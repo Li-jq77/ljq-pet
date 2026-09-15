@@ -94,21 +94,10 @@ else:
         }
     }
 
-# Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+# Password rules are intentionally relaxed for this demo project.
+# The registration page warns about weak passwords in a browser dialog,
+# but the server still allows the registration to continue.
+AUTH_PASSWORD_VALIDATORS = []
 
 # 未登录访问受保护页面时，统一跳转到站点自己的登录页。
 LOGIN_URL = os.environ.get("DJANGO_LOGIN_URL", "/login/")
